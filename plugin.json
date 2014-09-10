@@ -1,0 +1,12 @@
+{
+	"id": "nodebb-plugin-write-api",
+	"name": "NodeBB Write-Enabled API",
+	"description": "A RESTful JSON-speaking API allowing you to write things to NodeBB",
+	"url": "https://github.com/julianlam/nodebb-plugin-write-api",
+	"library": "./index.js",
+	"templates": "templates",
+	"hooks": [
+		{ "hook": "static:app.load", "method": "init" }
+	],
+	"minver": "0.5.0"
+}
