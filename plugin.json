@@ -9,5 +9,8 @@
 		{ "hook": "static:app.load", "method": "init" },
 		{ "hook": "filter:admin.header.build", "method": "addMenuItem" }
 	],
+	"less": [
+		"./less/style.less"
+	],
 	"minver": "0.5.0"
 }

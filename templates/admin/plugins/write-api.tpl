@@ -12,7 +12,7 @@
 			<div class="panel-body">
 				<table class="table table-striped">
 					<!-- BEGIN tokens -->
-					{tokens.access_token}
+					<img class="img-circle write-api img-small" src="../../{tokens.user.picture}" title="{tokens.user.username}"> {tokens.access_token} (assigned to uid {tokens.uid})
 					<!-- END tokens -->
 				</table>
 			</div>
