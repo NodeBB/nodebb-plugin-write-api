@@ -41,12 +41,11 @@ API.addMenuItem = function(custom_header, callback) {
 
 API.verifyToken = function(token, callback) {
 	db.getObjectField('writeToken:uid', token, function(err, uid) {
-		console.log(err, uid);
 		if (err) {
 			return callback(err);
 		} else {
 			return callback(null, uid ? {
-				uid: uid
+				uid: parseInt(uid, 10)
 			} : false);
 		}
 	});
