@@ -22,9 +22,8 @@ API.init = function(app, middleware, controllers, callback) {
 	// API Versions
 	app.use('/api/v1', routes.v1);
 
-	// ACP Page
-	app.get('/admin/plugins/write-api', middleware.admin.buildHeader, render);
-	app.get('/api/admin/plugins/write-api', render);
+	// ACP
+	require('./routes/admin')(app, middleware);
 
 	callback();
 };
