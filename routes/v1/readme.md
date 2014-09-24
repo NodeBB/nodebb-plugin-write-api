@@ -9,7 +9,10 @@ All API calls are prefixed `/api/vX`, where `X` is the version of API you are in
 
 ## Authentication
 
-*Not implemented*
+In development mode (with `NODE_ENV` environment variable set to `development`), you can pass in `uid`
+in either the query string or request body in order to set (or override) the current user.
+
+*To be expanded*
 
 ## Error Handling
 

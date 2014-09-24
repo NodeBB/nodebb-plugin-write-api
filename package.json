@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/julianlam/nodebb-plugin-write-api/issues"
   },
-  "homepage": "https://github.com/julianlam/nodebb-plugin-write-api"
+  "homepage": "https://github.com/julianlam/nodebb-plugin-write-api",
+  "dependencies": {
+    "passport-http-bearer": "^1.0.1"
+  }
 }
