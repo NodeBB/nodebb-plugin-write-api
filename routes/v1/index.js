@@ -1,16 +1,7 @@
+'use strict';
+/* globals module, require */
+
 module.exports = function(app, middleware) {
-	if (process.env.NODE_ENV === 'development') {
-		app.use(function(req, res, next) {
-			if (req.query.uid || req.body.uid) {
-				req.user = {
-					uid: req.query.uid || req.body.uid
-				}
-			}
-
-			next();
-		});
-	}
-
 	app.use('/topics', require('./topics')(middleware));
 
 	app.get('/ping', function(req, res) {
