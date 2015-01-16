@@ -1,7 +1,9 @@
 'use strict';
-/* globals module */
+/* globals module, require */
 
-var Utils = {};
+var errorHandler = require('../../lib/errorHandler.js'),
+
+	Utils = {};
 
 Utils.checkRequired = function(required, req, res) {
 	var missing = [];
@@ -14,11 +16,11 @@ Utils.checkRequired = function(required, req, res) {
 	if (!missing.length) {
 		return true;
 	} else if (res) {
-		res.status(400).json({
-			code: 'params-missing',
-			error: 'Required parameters were missing from this API call, please see the "values" property',
-			values: missing
-		});
+		res.status(400).send(errorHandler.generate(
+			400, 'params-missing',
+			'Required parameters were missing from this API call, please see the "params" property',
+			missing
+		));
 		return false;
 	} else {
 		return false;
