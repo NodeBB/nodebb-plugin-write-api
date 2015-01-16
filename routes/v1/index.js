@@ -11,7 +11,7 @@ module.exports = function(app, middleware) {
 		});
 	}
 
-	app.use('/category', require('./category')(middleware));
+	app.use('/topics', require('./topics')(middleware));
 
 	app.get('/ping', function(req, res) {
 		res.json(200, {

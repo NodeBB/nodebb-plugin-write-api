@@ -9,16 +9,13 @@ var Topics = require.main.require('./src/topics'),
 module.exports = function(middleware) {
 	var app = require('express').Router();
 
-	app.post('/:cid?', apiMiddleware.requireUser, function(req, res) {
-		if (!req.params.cid || isNaN(parseInt(req.params.cid))) {
-			return res.json(400, {
-				status: 'error',
-				message: 'Category ID must be specified'
-			});
+	app.post('/', apiMiddleware.requireUser, function(req, res) {
+		if (!utils.checkRequired(['cid', 'title', 'content'], req, res)) {
+			return false;
 		}
 
 		var payload = {
-				cid: req.params.cid,
+				cid: req.body.cid,
 				title: req.body.title,
 				content:req.body.content,
 				uid: req.user.uid
@@ -27,8 +24,9 @@ module.exports = function(middleware) {
 		Topics.post(payload, function(err, data) {
 			if (err) {
 				return res.json(500, {
-					status: 'error',
-					message: err.message
+					code: 'server-error',
+					error: 'NodeBB rejected this request with the error specified in the "values" property',
+					values: err.message
 				});
 			}
 
