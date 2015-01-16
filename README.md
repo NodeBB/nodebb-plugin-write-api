@@ -30,3 +30,9 @@ $ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
             * (Not implemented) Updates a topic
         * `DELETE` /:tid`
             * (Not implemented) Deletes a topic (RFC: should calling this a second time will purge the topic?)
+
+# Quick Start
+
+1. Install and activate the plugin, reload NodeBB
+1. Generate your uid an API token in the ACP page
+1. `curl -H "Authorization: Bearer {YOUR_TOKEN}" --data "title={TITLE}&content={CONTENT}&cid={CID}" http://localhost:4567/api/v1/topics`
