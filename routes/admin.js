@@ -1,5 +1,6 @@
 (function() {
-	"use strict";
+	'use strict';
+	/* globals module */
 
 	var async = module.parent.parent.require('async'),
 		db = module.parent.parent.require('./database'),

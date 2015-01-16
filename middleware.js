@@ -1,4 +1,7 @@
-var passport = module.parent.parent.require('passport'),
+'use strict';
+/* globals module, require */
+
+var passport = require.main.require('passport'),
 
 	Middleware = {};
 

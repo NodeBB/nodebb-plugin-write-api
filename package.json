@@ -26,5 +26,8 @@
   "homepage": "https://github.com/julianlam/nodebb-plugin-write-api",
   "dependencies": {
     "passport-http-bearer": "^1.0.1"
+  },
+  "nbbpm": {
+    "compatibility": "^0.6.0"
   }
 }

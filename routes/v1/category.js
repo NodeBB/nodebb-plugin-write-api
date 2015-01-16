@@ -1,4 +1,7 @@
-var Topics = module.parent.parent.parent.parent.require('./topics'),	// omg would you like some parent with your parent?
+'use strict';
+/* globals module, require */
+
+var Topics = require.main.require('./src/topics'),
 	apiMiddleware = require('../../middleware'),
 	utils = require('./utils');
 
@@ -9,8 +12,8 @@ module.exports = function(middleware) {
 	app.post('/:cid?', apiMiddleware.requireUser, function(req, res) {
 		if (!req.params.cid || isNaN(parseInt(req.params.cid))) {
 			return res.json(400, {
-				status: "error",
-				message: "Category ID must be specified"
+				status: 'error',
+				message: 'Category ID must be specified'
 			});
 		}
 
@@ -24,13 +27,13 @@ module.exports = function(middleware) {
 		Topics.post(payload, function(err, data) {
 			if (err) {
 				return res.json(500, {
-					status: "error",
+					status: 'error',
 					message: err.message
 				});
 			}
 
-			res.json(200, {
-				status: "ok",
+			res.status(200).json({
+				status: 'ok',
 				data: {
 					topic: data.topicData,
 					post: data.postData

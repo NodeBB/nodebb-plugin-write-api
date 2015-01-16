@@ -1,3 +1,6 @@
+'use strict';
+/* globals module, require */
+
 var express = require('express');
 
 module.exports = function(middleware) {
@@ -5,5 +8,5 @@ module.exports = function(middleware) {
 
 	return {
 		v1: v1
-	}
+	};
 };

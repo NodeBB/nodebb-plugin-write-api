@@ -12,9 +12,18 @@
 			<div class="panel-body">
 				<table class="table table-striped">
 					<!-- BEGIN tokens -->
-					<img class="img-circle write-api img-small" src="../../{tokens.user.picture}" title="{tokens.user.username}"> {tokens.access_token} (assigned to uid {tokens.uid})
+					<tr>
+						<td>
+							<img class="img-circle write-api img-small" src="{tokens.user.picture}" title="{tokens.user.username}"> {tokens.access_token} (assigned to uid {tokens.uid})
+						</td>
+					</tr>
 					<!-- END tokens -->
 				</table>
+				<form role="form" class="form-inline">
+					<label for="newToken-uid">For uid</label>
+					<input type="text" class="form-control" id="newToken-uid" placeholder="uid" /><br />
+					<button type="button" class="btn btn-block btn-primary" id="newToken-create">Create Token</button>
+				</form>
 			</div>
 		</div>
 	</div>

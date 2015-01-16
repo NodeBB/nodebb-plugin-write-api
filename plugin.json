@@ -12,5 +12,8 @@
 	"less": [
 		"./less/style.less"
 	],
+	"scripts": [
+		"public/js/admin.js"
+	],
 	"minver": "0.5.0"
 }
