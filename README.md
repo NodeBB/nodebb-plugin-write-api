@@ -22,6 +22,20 @@ $ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
 *This list is incomplete*
 
 * `/api/v1`
+    * `/users`
+        * `POST /:userslug/follow`
+            * Follows another user
+            * Accepts: No parameters
+        * `DELETE /:userslug/follow`
+            * Unfollows another user
+            * Accepts: No parameters
+    * `/groups`
+        * `POST /:group_name/membership`
+            * Joins a group (or requests membership if it is a private group)
+            * Accepts: No parameters
+        * `DELETE /:group_name/membership`
+            * Leaves a group
+            * Accepts: No parameters
     * `/topics`
         * `POST /`
             * Creates a new topic
