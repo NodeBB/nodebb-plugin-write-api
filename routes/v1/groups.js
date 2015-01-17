@@ -39,5 +39,11 @@ module.exports = function(middleware) {
 		}
 	});
 
+	app.delete('/:group_name/membership', apiMiddleware.requireUser, function(req, res) {
+		Groups.leave(req.params.group_name, req.user.uid, function(err) {
+			return errorHandler.handle(err, res);
+		});
+	});
+
 	return app;
 };
