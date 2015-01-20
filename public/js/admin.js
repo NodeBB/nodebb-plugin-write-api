@@ -8,6 +8,7 @@
 		Admin.init = function() {
 			Admin.initSettings();
 			$('#newToken-create').on('click', Admin.createToken);
+			$('#masterToken-create').on('click', Admin.createMasterToken);
 		};
 
 		Admin.initSettings = function() {
@@ -32,6 +33,16 @@
 			var uid = parseInt($('#newToken-uid').val(), 10) || 1;
 
 			socket.emit('plugins.writeApi.createToken', uid, function(err) {
+				if (!err) {
+					ajaxify.refresh();
+				} else {
+					app.alertError(err.message);
+				}
+			});
+		};
+
+		Admin.createMasterToken = function() {
+			socket.emit('plugins.writeApi.createMasterToken', {}, function(err) {
 				if (!err) {
 					ajaxify.refresh();
 				} else {
