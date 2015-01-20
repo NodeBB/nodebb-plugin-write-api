@@ -28,14 +28,11 @@ module.exports = function(middleware) {
 		});
 	});
 
-	app.post('/:userslug/update', apiMiddleware.requireUser, function(req, res, next) {
-		Users.getUidByUserslug(req.params.userslug, function(err, targetUid) {
-			if (err) {
-				return next(err);
-			}
-			Users.updateProfile(targetUid, req.body, function(err) {
-				return errorHandler.handle(err, res);
-			});
+	app.put('/user', apiMiddleware.requireUser, function(req, res) {
+		var uid = req.user ? req.user.uid : 0;
+
+		Users.updateProfile(uid, req.body, function(err) {
+			return errorHandler.handle(err, res);
 		});
 	});
 
