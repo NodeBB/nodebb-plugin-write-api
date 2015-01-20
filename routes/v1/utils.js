@@ -16,7 +16,7 @@ Utils.checkRequired = function(required, req, res) {
 	if (!missing.length) {
 		return true;
 	} else if (res) {
-		res.status(400).send(errorHandler.generate(
+		res.status(400).json(errorHandler.generate(
 			400, 'params-missing',
 			'Required parameters were missing from this API call, please see the "params" property',
 			missing
