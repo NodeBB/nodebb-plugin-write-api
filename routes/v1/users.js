@@ -28,7 +28,7 @@ module.exports = function(middleware) {
 		});
 	});
 
-	app.put('/user', apiMiddleware.requireUser, function(req, res) {
+	app.put('/', apiMiddleware.requireUser, function(req, res) {
 		var uid = req.user ? req.user.uid : 0;
 
 		Users.updateProfile(uid, req.body, function(err) {
