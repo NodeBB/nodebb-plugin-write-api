@@ -28,6 +28,17 @@ module.exports = function(middleware) {
 		});
 	});
 
+	app.post('/:userslug/update', apiMiddleware.requireUser, function(req, res, next) {
+		Users.getUidByUserslug(req.params.userslug, function(err, targetUid) {
+			if (err) {
+				return next(err);
+			}
+			Users.updateProfile(targetUid, req.body, function(err) {
+				return errorHandler.handle(err, res);
+			});
+		});
+	});
+
 	app.delete('/:userslug/follow', apiMiddleware.requireUser, function(req, res) {
 		Users.getUidByUserslug(req.params.userslug, function(err, targetUid) {
 			Users.unfollow(req.user.uid, targetUid, function(err) {
