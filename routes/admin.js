@@ -9,6 +9,7 @@
 		buildAdminPage = function(req, res) {
 			async.parallel({
 				tokens: async.apply(db.getObject, 'writeToken:uid'),
+				masterTokens: async.apply(db.getSetMembers, 'masterTokens'),
 				users: function(next) {
 					db.getObjectValues('writeToken:uid', function(err, uids) {
 						if (err || !uids) return next(err);
@@ -35,6 +36,13 @@
 						access_token: i
 					});
 				}
+
+				// Fix masterTokens return
+				data.masterTokens = data.masterTokens.map(function(token) {
+					return {
+						access_token: token
+					};
+				});
 
 				// Make users array a hash
 				var users = [];

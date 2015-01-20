@@ -57,5 +57,34 @@
 				</form>
 			</div>
 		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">Master Tokens</div>
+			<div class="panel-body">
+				<table class="table table-striped">
+					<tr>
+						<th>Token</th>
+					</tr>
+					<!-- BEGIN masterTokens -->
+					<tr>
+						<td>
+							 {masterTokens.access_token}
+						</td>
+					</tr>
+					<!-- END masterTokens -->
+				</table>
+				<form role="form">
+					<div class="form-group">
+						<button type="button" class="btn btn-block btn-primary" id="masterToken-create">Create Token</button>
+						<p class="help-block">
+							Master tokens differ from regular write-enabled tokens in that they can be utilised to make any API call as any user.
+						</p>
+						<p class="help-block">
+							To define a user in your call, add the <code>_uid</code> parameter to your request body.
+						</p>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 </div>
