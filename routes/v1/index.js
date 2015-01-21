@@ -1,7 +1,8 @@
 'use strict';
 /* globals module, require */
 
-var errorHandler = require('../../lib/errorHandler');
+var apiMiddleware = require('../../middleware'),
+	errorHandler = require('../../lib/errorHandler');
 
 module.exports = function(app, middleware) {
 	app.use('/users', require('./users')(middleware));
@@ -11,7 +12,18 @@ module.exports = function(app, middleware) {
 	app.get('/ping', function(req, res) {
 		res.json(200, {
 			code: 'ok',
-			params: 'pong'
+			message: 'pong',
+			params: {}
+		});
+	});
+
+	app.post('/ping', apiMiddleware.requireUser, function(req, res) {
+		res.json(200, {
+			code: 'ok',
+			message: 'pong, accepted test POST ping for uid ' + req.user.uid,
+			params: {
+				uid: req.user.uid
+			}
 		});
 	});
 
