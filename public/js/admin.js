@@ -9,6 +9,7 @@
 			Admin.initSettings();
 			$('#newToken-create').on('click', Admin.createToken);
 			$('#masterToken-create').on('click', Admin.createMasterToken);
+			$('table').on('click', '[data-action="revoke"]', Admin.revokeToken);
 		};
 
 		Admin.initSettings = function() {
@@ -43,6 +44,23 @@
 
 		Admin.createMasterToken = function() {
 			socket.emit('plugins.writeApi.createMasterToken', {}, function(err) {
+				if (!err) {
+					ajaxify.refresh();
+				} else {
+					app.alertError(err.message);
+				}
+			});
+		};
+
+		Admin.revokeToken = function() {
+			var rowEl = $(this).parents('tr'),
+				token = rowEl.attr('data-token'),
+				tokenType = rowEl.attr('data-token-type');
+
+			socket.emit('plugins.writeApi.revokeToken', {
+				type: tokenType,
+				token: token
+			}, function(err) {
 				if (!err) {
 					ajaxify.refresh();
 				} else {

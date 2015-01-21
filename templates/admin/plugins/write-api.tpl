@@ -11,12 +11,12 @@
 								<th>Token</th>
 							</tr>
 							<!-- BEGIN tokens -->
-							<tr>
+							<tr data-token="{tokens.access_token}" data-token-type="user">
 								<td>
 									<img class="img-circle write-api img-small" src="{tokens.user.picture}" title="{tokens.user.username} (uid {tokens.uid})">
 								</td>
 								<td>
-									 {tokens.access_token}
+									 {tokens.access_token} <span class="label label-warning pointer" data-action="revoke">Revoke</span>
 								</td>
 							</tr>
 							<!-- END tokens -->
@@ -42,9 +42,9 @@
 								<th>Token</th>
 							</tr>
 							<!-- BEGIN masterTokens -->
-							<tr>
+							<tr data-token="{masterTokens.access_token}" data-token-type="master">
 								<td>
-									 {masterTokens.access_token}
+									 {masterTokens.access_token} <span class="label label-warning pointer" data-action="revoke">Revoke</span>
 								</td>
 							</tr>
 							<!-- END masterTokens -->

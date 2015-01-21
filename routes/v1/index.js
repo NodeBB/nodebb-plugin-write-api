@@ -10,7 +10,7 @@ module.exports = function(app, middleware) {
 	app.use('/topics', require('./topics')(middleware));
 
 	app.get('/ping', function(req, res) {
-		res.json(200, {
+		res.status(200).json({
 			code: 'ok',
 			message: 'pong',
 			params: {}
@@ -18,7 +18,7 @@ module.exports = function(app, middleware) {
 	});
 
 	app.post('/ping', apiMiddleware.requireUser, function(req, res) {
-		res.json(200, {
+		res.status(200).json({
 			code: 'ok',
 			message: 'pong, accepted test POST ping for uid ' + req.user.uid,
 			params: {
