@@ -7,6 +7,7 @@ var apiMiddleware = require('../../middleware'),
 module.exports = function(app, middleware) {
 	app.use('/users', require('./users')(middleware));
 	app.use('/groups', require('./groups')(middleware));
+	app.use('/posts', require('./posts')(middleware));
 	app.use('/topics', require('./topics')(middleware));
 
 	app.get('/ping', function(req, res) {

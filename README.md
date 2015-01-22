@@ -41,7 +41,8 @@ $ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
             * Creates a new topic
             * Accepts: `cid`, `title`, `content`
         * `PUT` /:tid`
-            * (Not implemented) Updates a topic
+            * Updates a topic
+            * Accepts: `content`, `handle`, `title`, `topic_thumb`, `tags`
         * `DELETE` /:tid`
             * (Not implemented) Deletes a topic (RFC: should calling this a second time will purge the topic?)
 
