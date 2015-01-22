@@ -2,7 +2,9 @@
 /* globals module, require */
 
 var Topics = require.main.require('./src/topics'),
+	PostTools = require.main.require('./src/postTools'),
 	apiMiddleware = require('../../middleware'),
+	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
 
 
@@ -22,13 +24,7 @@ module.exports = function(middleware) {
 			};
 
 		Topics.post(payload, function(err, data) {
-			if (err) {
-				return res.json(500, {
-					code: 'server-error',
-					error: 'NodeBB rejected this request with the error specified in the "values" property',
-					values: err.message
-				});
-			}
+			if (err) { return errorHandler.handle(err, res); }
 
 			res.status(200).json({
 				status: 'ok',
@@ -37,6 +33,28 @@ module.exports = function(middleware) {
 					post: data.postData
 				}
 			});
+		});
+	});
+
+	app.put('/', apiMiddleware.requireUser, function(req, res) {
+		if (!utils.checkRequired(['pid', 'content'], req, res)) {
+			return false;
+		}
+
+		var payload = {
+			uid: req.user.uid,
+			pid: req.body.pid,
+			content: req.body.content,
+			options: {}
+		};
+
+		if (req.body.handle) { payload.handle = req.body.handle; }
+		if (req.body.title) { payload.title = req.body.title; }
+		if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
+		if (req.body.tags) { payload.options.tags = req.body.tags; }
+
+		PostTools.edit(payload, function(err) {
+			errorHandler.handle(err, res);
 		});
 	});
 
