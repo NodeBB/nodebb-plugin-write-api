@@ -19,32 +19,7 @@ $ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
 
 # API Resources
 
-*This list is incomplete*
-
-* `/api/v1`
-    * `/users`
-        * `POST /:userslug/follow`
-            * Follows another user
-            * Accepts: No parameters
-        * `DELETE /:userslug/follow`
-            * Unfollows another user
-            * Accepts: No parameters
-    * `/groups`
-        * `POST /:group_name/membership`
-            * Joins a group (or requests membership if it is a private group)
-            * Accepts: No parameters
-        * `DELETE /:group_name/membership`
-            * Leaves a group
-            * Accepts: No parameters
-    * `/topics`
-        * `POST /`
-            * Creates a new topic
-            * Accepts: `cid`, `title`, `content`
-        * `PUT` /:tid`
-            * Updates a topic
-            * Accepts: `content`, `handle`, `title`, `topic_thumb`, `tags`
-        * `DELETE` /:tid`
-            * (Not implemented) Deletes a topic (RFC: should calling this a second time will purge the topic?)
+* [`api/v1` Endpoints](routes/v1/readme.md)
 
 # Quick Start
 

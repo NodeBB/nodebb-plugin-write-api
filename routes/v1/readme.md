@@ -19,24 +19,40 @@ When the API encounters an error, it will do it's best to report what went wrong
 Errors will follow the format specified in this example:
 
     {
-        status: "error",
-        message: "User authentication is required for this API endpoint."
+        "code": "not-authorised",
+        "message": "You are not authorised to make this call",
+        "params": {}
     }
 
 ## Endpoints
 
-### Topics
+*This list is incomplete*
 
-#### `POST /category/:cid`
-
-This route creates a new topic under the category specified in the URL.
-
-**This call requires an access token**
-
-* (Required) cid
-    * The category id which this topic will be associated with
-* (Required) title
-    * A topic title
-* (Required) content
-    * The topic's main text body content
-
+* `/api/v1`
+    * `/users`
+        * `POST /`
+            * Creates a new user
+            * Accepts: `username`, `password`, `email`
+            * Any other data passed in will be saved into the user hash
+        * `POST /:userslug/follow`
+            * Follows another user
+            * Accepts: No parameters
+        * `DELETE /:userslug/follow`
+            * Unfollows another user
+            * Accepts: No parameters
+    * `/groups`
+        * `POST /:group_name/membership`
+            * Joins a group (or requests membership if it is a private group)
+            * Accepts: No parameters
+        * `DELETE /:group_name/membership`
+            * Leaves a group
+            * Accepts: No parameters
+    * `/topics`
+        * `POST /`
+            * Creates a new topic
+            * Accepts: `cid`, `title`, `content`
+        * `PUT` /:tid`
+            * Updates a topic
+            * Accepts: `content`, `handle`, `title`, `topic_thumb`, `tags`
+        * `DELETE` /:tid`
+            * (Not implemented) Deletes a topic (RFC: should calling this a second time will purge the topic?)
