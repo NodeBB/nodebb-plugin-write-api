@@ -15,7 +15,9 @@ module.exports = function(/*middleware*/) {
 			return false;
 		}
 
-		// Create a new user
+		Users.create(req.body, function(err) {
+			return errorHandler.handle(err, res);
+		});
 	});
 
 	app.put('/', apiMiddleware.requireUser, function(req, res) {
