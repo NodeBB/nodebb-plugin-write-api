@@ -15,7 +15,7 @@ Middleware.requireUser = function(req, res, next) {
 		// If the token received was a master token, a _uid must also be present for all calls
 		if (user.hasOwnProperty('uid')) {
 			req.login(user, function(err) {
-				if (err) { errorHandler.respond(500, res); }
+				if (err) { return errorHandler.respond(500, res); }
 				next();
 			});
 		} else if (user.hasOwnProperty('master') && user.master === true) {
@@ -24,7 +24,7 @@ Middleware.requireUser = function(req, res, next) {
 				delete user.master;
 
 				req.login(user, function(err) {
-					if (err) { errorHandler.respond(500, res); }
+					if (err) { return errorHandler.respond(500, res); }
 					next();
 				});
 			} else {
@@ -35,7 +35,7 @@ Middleware.requireUser = function(req, res, next) {
 				));
 			}
 		} else {
-			errorHandler.respond(500, res);
+			return errorHandler.respond(500, res);
 		}
 	})(req, res, next);
 };
@@ -52,6 +52,24 @@ Middleware.requireAdmin = function(req, res, next) {
 
 		next();
 	});
+};
+
+Middleware.exposeUid = function(req, res, next) {
+	if (req.params.hasOwnProperty('userslug')) {
+		user.getUidByUserslug(req.params.userslug, function(err, uid) {
+			if (err) {
+				return errorHandler.respond(500, res);
+			} else if (uid === null) {
+				// If exposed uid is null, then that *specifically* means that the passed in userslug is garbage
+				return errorHandler.respond(404, res);
+			}
+
+			res.locals.uid = uid;
+			next();
+		})
+	} else {
+		next();
+	}
 };
 
 module.exports = Middleware;

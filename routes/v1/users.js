@@ -20,8 +20,8 @@ module.exports = function(/*middleware*/) {
 		});
 	});
 
-	app.put('/', apiMiddleware.requireUser, function(req, res) {
-		Users.updateProfile(req.user.uid, req.body, function(err) {
+	app.put('/:userslug?', apiMiddleware.requireUser, apiMiddleware.exposeUid, function(req, res) {
+		Users.updateProfile(res.locals.uid || req.user.uid, req.body, function(err) {
 			return errorHandler.handle(err, res);
 		});
 	});
