@@ -8,7 +8,9 @@ With this plugin, however, you can create content on NodeBB externally (new topi
 
 # Installation
 
-### **Important: This module is currently in development and is not intended for production use, hence it has not been published to npm yet. Use with caution.**
+**Install this plugin via the plugins page in the ACP.**
+
+Alternatively:
 
 ```
 $ cd /path/to/nodebb/node_modules
