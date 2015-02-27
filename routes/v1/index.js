@@ -9,6 +9,7 @@ module.exports = function(app, middleware) {
 	app.use('/groups', require('./groups')(middleware));
 	app.use('/posts', require('./posts')(middleware));
 	app.use('/topics', require('./topics')(middleware));
+	app.use('/categories', require('./categories')(middleware));
 
 	app.get('/ping', function(req, res) {
 		res.status(200).json({
