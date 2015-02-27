@@ -19,6 +19,13 @@
         * `DELETE /:userslug/follow`
             * Unfollows another user
             * Accepts: No parameters
+    * `/categories`
+        * `POST /`
+            * Creates a new category
+            * Accepts: `name`. `description`, `bgColor`, `color`
+        * `PUT /:cid`
+            * Updates a category's data
+            * Accepts: `name`. `description`, `bgColor`, `color`
     * `/groups`
         * `POST /:group_name/membership`
             * Joins a group (or requests membership if it is a private group)
