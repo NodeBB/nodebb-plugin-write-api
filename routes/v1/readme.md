@@ -25,7 +25,7 @@
             * Accepts: `name`. `description`, `bgColor`, `color`
         * `PUT /:cid`
             * Updates a category's data
-            * Accepts: `name`. `description`, `bgColor`, `color`
+            * Accepts: `name`. `description`, `bgColor`, `color`, `parentCid`
     * `/groups`
         * `POST /:group_name/membership`
             * Joins a group (or requests membership if it is a private group)
