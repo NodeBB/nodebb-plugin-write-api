@@ -22,7 +22,7 @@
     * `/categories`
         * `POST /`
             * Creates a new category
-            * Accepts: `name`, `description`, `bgColor`, `color`
+            * Accepts: `name`, `description`, `bgColor`, `color`, `parentCid`, `class`
         * `PUT /:cid`
             * Updates a category's data
             * Accepts: `name`, `description`, `bgColor`, `color`, `parentCid`
