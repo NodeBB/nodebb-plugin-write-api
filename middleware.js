@@ -19,8 +19,8 @@ Middleware.requireUser = function(req, res, next) {
 				next();
 			});
 		} else if (user.hasOwnProperty('master') && user.master === true) {
-			if (req.body.hasOwnProperty('_uid')) {
-				user.uid = req.body._uid;
+			if (req.body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
+				user.uid = req.body._uid || req.query._uid;
 				delete user.master;
 
 				req.login(user, function(err) {
