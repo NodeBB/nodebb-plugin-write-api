@@ -27,10 +27,10 @@
             * Updates a category's data
             * Accepts: `name`, `description`, `bgColor`, `color`, `parentCid`
     * `/groups`
-        * `POST /:group_name/membership`
+        * `POST /:slug/membership`
             * Joins a group (or requests membership if it is a private group)
             * Accepts: No parameters
-        * `DELETE /:group_name/membership`
+        * `DELETE /:slug/membership`
             * Leaves a group
             * Accepts: No parameters
     * `/topics`
