@@ -48,6 +48,7 @@ module.exports = function(middleware) {
 			options: {}
 		};
 
+		// Maybe a "set if available" utils method may come in handy
 		if (req.body.handle) { payload.handle = req.body.handle; }
 		if (req.body.title) { payload.title = req.body.title; }
 		if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
@@ -57,6 +58,27 @@ module.exports = function(middleware) {
 			errorHandler.handle(err, res);
 		});
 	});
+
+	app.route('/follow')
+		.post(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['tid'], req, res)) {
+				return false;
+			}
+
+			Topics.follow(req.body.tid, req.user.uid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['tid'], req, res)) {
+				return false;
+			}
+			console.log('DERP');
+
+			Topics.unfollow(req.body.tid, req.user.uid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		});
 
 	return app;
 };

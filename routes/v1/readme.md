@@ -41,4 +41,10 @@
             * Updates a topic
             * Accepts: `content`, `handle`, `title`, `topic_thumb`, `tags`
         * `DELETE` /:tid`
-            * (Not implemented) Deletes a topic (RFC: should calling this a second time will purge the topic?)
+            * **(Not implemented)** Deletes a topic (RFC: should calling this a second time will purge the topic?)
+        * `POST /follow`
+            * Subscribes a user to a topic
+            * Accepts: `tid`
+        * `DELETE /follow`
+            * Unsubscribes a user to a topic
+            * Accepts: `tid`
