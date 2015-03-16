@@ -73,7 +73,6 @@ module.exports = function(middleware) {
 			if (!utils.checkRequired(['tid'], req, res)) {
 				return false;
 			}
-			console.log('DERP');
 
 			Topics.unfollow(req.body.tid, req.user.uid, function(err) {
 				errorHandler.handle(err, res);
