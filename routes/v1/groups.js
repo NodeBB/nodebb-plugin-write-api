@@ -19,28 +19,28 @@ module.exports = function(middleware) {
 		// Create a new group
 	});
 
-	app.post('/:group_name/membership', apiMiddleware.requireUser, function(req, res) {
+	app.post('/:slug/membership', apiMiddleware.requireUser, middleware.exposeGroupName, function(req, res) {
 		if (Meta.config.allowPrivateGroups !== '0') {
-			Groups.isPrivate(req.params.group_name, function(err, isPrivate) {
+			Groups.isPrivate(res.locals.groupName, function(err, isPrivate) {
 				if (isPrivate) {
-					Groups.requestMembership(req.params.group_name, req.user.uid, function(err) {
+					Groups.requestMembership(res.locals.groupName, req.user.uid, function(err) {
 						return errorHandler.handle(err, res);
 					});
 				} else {
-					Groups.join(req.params.group_name, req.user.uid, function(err) {
+					Groups.join(res.locals.groupName, req.user.uid, function(err) {
 						return errorHandler.handle(err, res);
 					});
 				}
 			});
 		} else {
-			Groups.join(req.params.group_name, req.user.uid, function(err) {
+			Groups.join(res.locals.groupName, req.user.uid, function(err) {
 				return errorHandler.handle(err, res);
 			});
 		}
 	});
 
-	app.delete('/:group_name/membership', apiMiddleware.requireUser, function(req, res) {
-		Groups.leave(req.params.group_name, req.user.uid, function(err) {
+	app.delete('/:slug/membership', apiMiddleware.requireUser, middleware.exposeGroupName, function(req, res) {
+		Groups.leave(res.locals.groupName, req.user.uid, function(err) {
 			return errorHandler.handle(err, res);
 		});
 	});
