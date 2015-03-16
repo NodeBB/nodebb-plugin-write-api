@@ -3,8 +3,11 @@
 	/* globals module */
 
 	var async = module.parent.parent.require('async'),
+		fs = require('fs'),
+		path = require('path'),
 		db = module.parent.parent.require('./database'),
 		User = module.parent.parent.require('./user'),
+		plugins = module.parent.parent.require('./plugins'),
 
 		buildAdminPage = function(req, res) {
 			async.parallel({
@@ -23,6 +26,13 @@
 						}
 
 						User.getMultipleUserFields(uids, ['uid', 'username', 'picture'], next);
+					});
+				},
+				documentation: function(next) {
+					fs.readFile(path.join(__dirname, 'v1/readme.md'), {
+						encoding: 'utf-8'
+					}, function(err, markdown) {
+						plugins.fireHook('filter:parse.raw', markdown, next);
 					});
 				}
 			}, function(err, data) {

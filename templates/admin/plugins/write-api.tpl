@@ -7,16 +7,20 @@
 					<div class="panel-body">
 						<table class="table table-striped">
 							<tr>
-								<th>User</th>
-								<th>Token</th>
+								<th>User/Token</th>
 							</tr>
 							<!-- BEGIN tokens -->
 							<tr data-token="{tokens.access_token}" data-token-type="user">
 								<td>
-									<img class="img-circle write-api img-small" src="{tokens.user.picture}" title="{tokens.user.username} (uid {tokens.uid})">
-								</td>
-								<td>
-									 {tokens.access_token} <span class="label label-warning pointer" data-action="revoke">Revoke</span>
+									<div class="input-group">
+										<span class="input-group-addon">
+											<img class="img-circle write-api img-small" src="{tokens.user.picture}" title="{tokens.user.username} (uid {tokens.uid})">
+										</span>
+										<input type="text" class="form-control" value="{tokens.access_token}" />
+										<span class="input-group-btn">
+											<button class="btn btn-default" data-action="revoke" type="button"><i class="fa fa-times"></i> Revoke</button>
+										</span>
+									</div>
 								</td>
 							</tr>
 							<!-- END tokens -->
@@ -44,7 +48,12 @@
 							<!-- BEGIN masterTokens -->
 							<tr data-token="{masterTokens.access_token}" data-token-type="master">
 								<td>
-									 {masterTokens.access_token} <span class="label label-warning pointer" data-action="revoke">Revoke</span>
+									 <div class="input-group">
+										<input type="text" class="form-control" value="{masterTokens.access_token}" />
+										<span class="input-group-btn">
+											<button class="btn btn-default" data-action="revoke" type="button"><i class="fa fa-times"></i> Revoke</button>
+										</span>
+									</div>
 								</td>
 							</tr>
 							<!-- END masterTokens -->
@@ -64,11 +73,21 @@
 				</div>
 			</div>
 		</div>
-		<div class="panel panel-default">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">API Documentation</div>
+					<div class="panel-body">
+						{documentation}
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="panel panel-default">
 			<div class="panel-heading">Write API Settings</div>
 			<div class="panel-body">
 				<form role="form" class="writeapi-settings">
-					<!-- <p>
+					<p>
 						Adjust these settings. You can then retrieve these settings in code via:
 						<code>meta.config['sample:setting1']</code> and <code>meta.config['sample:setting2']</code>
 					</p>
@@ -79,17 +98,17 @@
 					<div class="form-group">
 						<label for="Setting 2">Setting 2</label>
 						<input type="text" id="setting-2" name="setting-2" title="Setting 2" class="form-control" placeholder="Setting 2">
-					</div> -->
+					</div>
 				</form>
 			</div>
-		</div>
+		</div> -->
 	</div>
-	<div class="col-lg-3">
+	<!-- <div class="col-lg-3">
 		<div class="panel panel-default">
 			<div class="panel-heading">Control Panel</div>
 			<div class="panel-body">
 				<button class="btn btn-primary" id="save" disabled>Save Settings</button>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </div>
