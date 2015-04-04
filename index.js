@@ -6,6 +6,7 @@ var	passport = module.parent.require('passport'),
 
 	auth = require('./lib/auth'),
 	sockets = require('./lib/sockets'),
+	middleware = require('./middleware'),
 
 	API = {};
 
@@ -37,6 +38,10 @@ API.addMenuItem = function(custom_header, callback) {
 	});
 
 	callback(null, custom_header);
+};
+
+API.authenticate = function(data) {
+	middleware.requireUser(data.req, data.res, data.next);
 };
 
 module.exports = API;

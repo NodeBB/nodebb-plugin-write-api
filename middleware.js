@@ -16,6 +16,8 @@ Middleware.requireUser = function(req, res, next) {
 		if (user.hasOwnProperty('uid')) {
 			req.login(user, function(err) {
 				if (err) { return errorHandler.respond(500, res); }
+
+				req.uid = user.uid;
 				next();
 			});
 		} else if (user.hasOwnProperty('master') && user.master === true) {
@@ -25,6 +27,8 @@ Middleware.requireUser = function(req, res, next) {
 
 				req.login(user, function(err) {
 					if (err) { return errorHandler.respond(500, res); }
+
+					req.uid = user.uid;
 					next();
 				});
 			} else {

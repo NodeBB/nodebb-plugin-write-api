@@ -7,13 +7,13 @@
 	"templates": "templates",
 	"hooks": [
 		{ "hook": "static:app.load", "method": "init" },
-		{ "hook": "filter:admin.header.build", "method": "addMenuItem" }
+		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
+		{ "hook": "action:middleware.authenticate", "method": "authenticate"}
 	],
 	"less": [
 		"./less/style.less"
 	],
 	"scripts": [
 		"public/js/admin.js"
-	],
-	"minver": "0.5.0"
+	]
 }
