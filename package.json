@@ -29,6 +29,6 @@
     "passport-http-bearer": "^1.0.1"
   },
   "nbbpm": {
-    "compatibility": "^0.6.0"
+    "compatibility": "^0.7.0"
   }
 }
