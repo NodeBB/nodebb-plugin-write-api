@@ -19,6 +19,16 @@
         * `DELETE /:userslug/follow`
             * Unfollows another user
             * Accepts: No parameters
+        * `GET /:uid/tokens`
+            * Retrieves a list of active tokens for that user
+            * Accepts: No parameters
+        * `POST /:uid/tokens`
+            * Creates a new user token for the passed in uid
+            * Accepts: No parameters
+            * Must be called with an active token for that user
+        * `DELETE /:uid/tokens/:token`
+            * Revokes an active user token
+            * Accepts: No parameters
     * `/categories`
         * `POST /`
             * Creates a new category
