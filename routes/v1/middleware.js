@@ -59,26 +59,6 @@ Middleware.requireAdmin = function(req, res, next) {
 	});
 };
 
-Middleware.exposeUid = function(req, res, next) {
-	// This middleware differs from the one found in core as it sends back a 404 if the passed in userslug does not exist.
-	// Core sometimes does different things if a user isn't found, but in the write-api, we can broadly send a 404.
-	if (req.params.hasOwnProperty('userslug')) {
-		user.getUidByUserslug(req.params.userslug, function(err, uid) {
-			if (err) {
-				return errorHandler.respond(500, res);
-			} else if (uid === null) {
-				// If exposed uid is null, then that *specifically* means that the passed in userslug is garbage
-				return errorHandler.respond(404, res);
-			}
-
-			res.locals.uid = uid;
-			next();
-		})
-	} else {
-		next();
-	}
-};
-
 Middleware.validateTid = function(req, res, next) {
 	if (req.params.hasOwnProperty('tid')) {
 		topics.exists(req.params.tid, function(err, exists) {

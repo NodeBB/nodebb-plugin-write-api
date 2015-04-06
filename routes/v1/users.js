@@ -21,25 +21,25 @@ module.exports = function(/*middleware*/) {
 		});
 	});
 
-	app.put('/:userslug?', apiMiddleware.requireUser, apiMiddleware.exposeUid, function(req, res) {
+	app.put('/:uid?', apiMiddleware.requireUser, function(req, res) {
+		if (parseInt(req.params.uid, 10) !== req.user.uid) {
+			return errorHandler.respond(401, res);
+		}
+
 		Users.updateProfile(res.locals.uid || req.user.uid, req.body, function(err) {
 			return errorHandler.handle(err, res);
 		});
 	});
 
-	app.post('/:userslug/follow', apiMiddleware.requireUser, function(req, res) {
-		Users.getUidByUserslug(req.params.userslug, function(err, targetUid) {
-			Users.follow(req.user.uid, targetUid, function(err) {
-				return errorHandler.handle(err, res);
-			});
+	app.post('/:uid/follow', apiMiddleware.requireUser, function(req, res) {
+		Users.follow(req.user.uid, req.params.uid, function(err) {
+			return errorHandler.handle(err, res);
 		});
 	});
 
-	app.delete('/:userslug/follow', apiMiddleware.requireUser, function(req, res) {
-		Users.getUidByUserslug(req.params.userslug, function(err, targetUid) {
-			Users.unfollow(req.user.uid, targetUid, function(err) {
-				return errorHandler.handle(err, res);
-			});
+	app.delete('/:uid/follow', apiMiddleware.requireUser, function(req, res) {
+		Users.unfollow(req.user.uid, req.params.uid, function(err) {
+			return errorHandler.handle(err, res);
 		});
 	});
 
