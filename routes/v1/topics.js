@@ -69,6 +69,11 @@ module.exports = function(middleware) {
 			Topics.reply(payload, function(err, returnData) {
 				errorHandler.handle(err, res, returnData);
 			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.delete(req.params.tid, function(err) {
+				errorHandler.handle(err, res);
+			});
 		});
 
 	app.route('/follow')
