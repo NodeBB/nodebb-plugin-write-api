@@ -40,7 +40,7 @@
         * `POST /:tid`
             * Posts a new reply to the topic
             * Accepts: `content`, `toPid`
-        * `PUT` /:tid`
+        * `PUT /:tid`
             * Updates a topic
             * Accepts: `content`, `handle`, `title`, `topic_thumb`, `tags`
         * `DELETE` /:tid`
