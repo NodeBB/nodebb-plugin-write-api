@@ -3,6 +3,7 @@
 
 var passport = require.main.require('passport'),
 	user = require.main.require('./src/user'),
+	topics = require.main.require('./src/topics'),
 	errorHandler = require('./lib/errorHandler'),
 
 	Middleware = {};
@@ -73,6 +74,22 @@ Middleware.exposeUid = function(req, res, next) {
 		})
 	} else {
 		next();
+	}
+};
+
+Middleware.validateTid = function(req, res, next) {
+	if (req.params.hasOwnProperty('tid')) {
+		topics.exists(req.params.tid, function(err, exists) {
+			if (err) {
+				errorHandler.respond(500, res);
+			} else if (!exists) {
+				errorHandler.respond(404, res);
+			} else {
+				next();
+			}
+		});
+	} else {
+		errorHandler.respond(404, res);
 	}
 };
 
