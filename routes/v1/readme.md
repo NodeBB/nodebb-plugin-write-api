@@ -53,8 +53,9 @@
         * `PUT /:tid`
             * Updates a topic
             * Accepts: `content`, `handle`, `title`, `topic_thumb`, `tags`
-        * `DELETE` /:tid`
-            * **(Not implemented)** Deletes a topic (RFC: should calling this a second time will purge the topic?)
+        * `DELETE /:tid`
+            * Deletes a topic
+            * Accepts: No parameters
         * `POST /follow`
             * Subscribes a user to a topic
             * Accepts: `tid`
