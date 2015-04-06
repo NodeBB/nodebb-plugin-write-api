@@ -25,15 +25,7 @@ module.exports = function(middleware) {
 				};
 
 			Topics.post(payload, function(err, data) {
-				if (err) { return errorHandler.handle(err, res); }
-
-				res.status(200).json({
-					status: 'ok',
-					data: {
-						topic: data.topicData,
-						post: data.postData
-					}
-				});
+				return errorHandler.handle(err, res, data); }
 			});
 		})
 		.put(apiMiddleware.requireUser, function(req, res) {
@@ -54,8 +46,8 @@ module.exports = function(middleware) {
 			if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
 			if (req.body.tags) { payload.options.tags = req.body.tags; }
 
-			PostTools.edit(payload, function(err) {
-				errorHandler.handle(err, res);
+			PostTools.edit(payload, function(err, returnData) {
+				errorHandler.handle(err, res, returnData);
 			});
 		});
 
