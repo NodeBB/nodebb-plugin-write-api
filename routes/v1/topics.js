@@ -25,7 +25,7 @@ module.exports = function(middleware) {
 				};
 
 			Topics.post(payload, function(err, data) {
-				return errorHandler.handle(err, res, data); }
+				return errorHandler.handle(err, res, data);
 			});
 		})
 		.put(apiMiddleware.requireUser, function(req, res) {

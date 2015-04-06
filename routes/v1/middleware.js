@@ -4,7 +4,7 @@
 var passport = require.main.require('passport'),
 	user = require.main.require('./src/user'),
 	topics = require.main.require('./src/topics'),
-	errorHandler = require('./lib/errorHandler'),
+	errorHandler = require('../../lib/errorHandler'),
 
 	Middleware = {};
 
