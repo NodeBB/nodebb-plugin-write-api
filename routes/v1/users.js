@@ -2,7 +2,7 @@
 /* globals module, require */
 
 var Users = require.main.require('./src/user'),
-	apiMiddleware = require('../../middleware'),
+	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
 

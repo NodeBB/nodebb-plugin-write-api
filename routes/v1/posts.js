@@ -2,7 +2,7 @@
 /* globals module, require */
 
 var PostTools = require.main.require('./src/postTools'),
-	apiMiddleware = require('../../middleware'),
+	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
 

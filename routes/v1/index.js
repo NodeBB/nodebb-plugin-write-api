@@ -1,16 +1,16 @@
 'use strict';
 /* globals module, require */
 
-var apiMiddleware = require('../../middleware'),
+var apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	plugins = require.main.require('./src/plugins');
 
-module.exports = function(app, middleware) {
-	app.use('/users', require('./users')(middleware));
-	app.use('/groups', require('./groups')(middleware));
-	app.use('/posts', require('./posts')(middleware));
-	app.use('/topics', require('./topics')(middleware));
-	app.use('/categories', require('./categories')(middleware));
+module.exports = function(app, coreMiddleware) {
+	app.use('/users', require('./users')(coreMiddleware));
+	app.use('/groups', require('./groups')(coreMiddleware));
+	app.use('/posts', require('./posts')(coreMiddleware));
+	app.use('/topics', require('./topics')(coreMiddleware));
+	app.use('/categories', require('./categories')(coreMiddleware));
 
 	app.get('/ping', function(req, res) {
 		res.status(200).json({
@@ -35,7 +35,7 @@ module.exports = function(app, middleware) {
 	plugins.fireHook('filter:plugin.write-api.routes', {
 		router: customRouter,
 		apiMiddleware: apiMiddleware,
-		middleware: middleware,
+		middleware: coreMiddleware,
 		errorHandler: errorHandler
 	}, function(err, payload) {
 		app.use('/', payload.router);

@@ -3,7 +3,7 @@
 
 var Groups = require.main.require('./src/groups'),
 	Meta = require.main.require('./src/meta'),
-	apiMiddleware = require('../../middleware'),
+	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
 

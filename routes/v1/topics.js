@@ -3,7 +3,7 @@
 
 var Topics = require.main.require('./src/topics'),
 	PostTools = require.main.require('./src/postTools'),
-	apiMiddleware = require('../../middleware'),
+	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
 

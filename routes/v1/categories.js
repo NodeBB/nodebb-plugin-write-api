@@ -2,7 +2,7 @@
 /* globals module, require */
 
 var Categories = require.main.require('./src/categories'),
-	apiMiddleware = require('../../middleware'),
+	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
 
