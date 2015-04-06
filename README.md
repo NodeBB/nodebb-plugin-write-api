@@ -52,3 +52,12 @@ When the API encounters an error, it will do it's best to report what went wrong
         "message": "You are not authorised to make this call",
         "params": {}
     }
+
+# Changelog
+
+# v2.x to v3.x
+
+* `user/` routes now take a uid instead of a userslug. This affects the following routes:
+    * `PUT /api/v1/user`
+    * `POST /api/v1/user/follow`
+    * `DELETE /api/v1/user/follow`
