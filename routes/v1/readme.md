@@ -21,7 +21,9 @@
             * Accepts: No parameters
         * `POST /:uid/chats`
             * Sends a chat message to another user
-            * Accepts: `message`, `quiet`
+            * Accepts: `message`, `timestamp`, `quiet`
+            * `timestamp` (unix timestamp in ms) allows messages to be sent from the past (useful when importing chats)
+            * `quiet` if set, will not notify the user that a chat message has been received (also useful during imports)
         * `GET /:uid/tokens`
             * Retrieves a list of active tokens for that user
             * Accepts: No parameters
