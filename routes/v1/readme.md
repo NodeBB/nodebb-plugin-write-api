@@ -19,6 +19,9 @@
         * `DELETE /:uid/follow`
             * Unfollows another user
             * Accepts: No parameters
+        * `POST /:uid/chats`
+            * Sends a chat message to another user
+            * Accepts: `message`, `quiet`
         * `GET /:uid/tokens`
             * Retrieves a list of active tokens for that user
             * Accepts: No parameters
