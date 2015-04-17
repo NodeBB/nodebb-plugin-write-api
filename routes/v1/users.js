@@ -2,6 +2,7 @@
 /* globals module, require */
 
 var Users = require.main.require('./src/user'),
+	Messaging = require.main.require('./src/messaging'),
 	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	auth = require('../../lib/auth'),
@@ -42,6 +43,25 @@ module.exports = function(/*middleware*/) {
 			return errorHandler.handle(err, res);
 		});
 	});
+
+	app.route('/:uid/chats')
+		.post(apiMiddleware.requireUser, function(req, res) {
+			Messaging.canMessage(req.user.uid, req.params.uid, function(err, allowed) {
+				if (err) {
+					return errorHandler.handle(err, res);
+				} else if (!allowed) {
+					return errorHandler.respond(403, res);
+				}
+
+				Messaging.addMessage(req.user.uid, req.params.uid, req.body.message, function(err, message) {
+					if (parseInt(req.body.quiet, 10) !== 1) {
+						Messaging.notifyUser(req.user.uid, req.params.uid, message);
+					}
+
+					return errorHandler.handle(err, res, message);
+				});
+			});
+		});
 
 	app.route('/:uid/tokens')
 		.get(apiMiddleware.requireUser, function(req, res) {
