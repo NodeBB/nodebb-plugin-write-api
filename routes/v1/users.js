@@ -17,8 +17,10 @@ module.exports = function(/*middleware*/) {
 			return false;
 		}
 
-		Users.create(req.body, function(err) {
-			return errorHandler.handle(err, res);
+		Users.create(req.body, function(err, uid) {
+			return errorHandler.handle(err, res, {
+				uid: uid
+			});
 		});
 	});
 
