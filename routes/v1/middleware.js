@@ -59,6 +59,24 @@ Middleware.requireAdmin = function(req, res, next) {
 	});
 };
 
+Middleware.exposeAdmin = function(req, res, next) {
+	// Unlike `requireAdmin`, this middleware just checks the uid, and sets `isAdmin` in `res.locals`
+	res.locals.isAdmin = false;
+
+	if (!req.user) {
+		return next();
+	}
+
+	user.isAdministrator(req.user.uid, function(err, isAdmin) {
+		if (err) {
+			return errorHandler.handle(err, res);
+		} else {
+			res.locals.isAdmin = isAdmin;
+			return next();
+		}
+	});
+}
+
 Middleware.validateTid = function(req, res, next) {
 	if (req.params.hasOwnProperty('tid')) {
 		topics.exists(req.params.tid, function(err, exists) {

@@ -24,8 +24,8 @@ module.exports = function(/*middleware*/) {
 		});
 	});
 
-	app.put('/:uid?', apiMiddleware.requireUser, function(req, res) {
-		if (parseInt(req.params.uid, 10) !== req.user.uid) {
+	app.put('/:uid?', apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+		if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
 			return errorHandler.respond(401, res);
 		}
 
