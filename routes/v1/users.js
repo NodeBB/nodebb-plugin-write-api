@@ -34,6 +34,25 @@ module.exports = function(/*middleware*/) {
 		});
 	});
 
+    app.put('/:uid/password', apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+        if (!utils.checkRequired(['currentPassword', 'newPassword'], req, res)) {
+            return false;
+        }
+
+        var uid = parseInt(req.params.uid, 10);
+        if (uid !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
+            return errorHandler.respond(401, res);
+        }
+        var data = {
+            uid: uid,
+            currentPassword: req.body.currentPassword,
+            newPassword: req.body.newPassword
+        };
+        Users.changePassword(uid, data, function(err) {
+            return errorHandler.handle(err, res);
+        });
+    });
+
 	app.post('/:uid/follow', apiMiddleware.requireUser, function(req, res) {
 		Users.follow(req.user.uid, req.params.uid, function(err) {
 			return errorHandler.handle(err, res);
