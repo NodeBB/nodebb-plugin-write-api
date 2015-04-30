@@ -53,6 +53,17 @@ module.exports = function(/*middleware*/) {
         });
     });
 
+    app.put('/:uid/password_reset', apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
+        if (!utils.checkRequired(['newPassword'], req, res)) {
+            return false;
+        }
+
+        var uid = parseInt(req.params.uid, 10);
+        Users.resetPassword(uid, req.body.newPassword, function(err) {
+            return errorHandler.handle(err, res);
+        });
+    });
+
 	app.post('/:uid/follow', apiMiddleware.requireUser, function(req, res) {
 		Users.follow(req.user.uid, req.params.uid, function(err) {
 			return errorHandler.handle(err, res);

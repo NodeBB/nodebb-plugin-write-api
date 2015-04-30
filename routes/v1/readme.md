@@ -16,6 +16,10 @@
         * `PUT /:uid/password`
             * Change password
             * Accepts: `currentPassword`, `newPassword`
+        * `PUT /:uid/password_reset`
+            * Change password
+            * Accepts: `newPassword`
+            * only admin has auth
         * `POST /:uid/follow`
             * Follows another user
             * Accepts: No parameters
