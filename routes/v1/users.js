@@ -29,7 +29,7 @@ module.exports = function(/*middleware*/) {
 			return errorHandler.respond(401, res);
 		}
 
-		Users.updateProfile(res.locals.uid || req.user.uid, req.body, function(err) {
+		Users.updateProfile(req.params.uid, req.body, function(err) {
 			return errorHandler.handle(err, res);
 		});
 	});
