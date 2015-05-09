@@ -5,8 +5,8 @@ var Topics = require.main.require('./src/topics'),
 	PostTools = require.main.require('./src/postTools'),
 	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
-	utils = require('./utils');
-
+	utils = require('./utils'),
+	winston = require.main.require('winston');
 
 module.exports = function(middleware) {
 	var app = require('express').Router();
@@ -76,8 +76,22 @@ module.exports = function(middleware) {
 			});
 		});
 
+	app.route('/:tid/follow')
+		.post(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.follow(req.params.tid, req.user.uid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.unfollow(req.params.tid, req.user.uid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		});
+
+	// **DEPRECATED** Do not use.
 	app.route('/follow')
 		.post(apiMiddleware.requireUser, function(req, res) {
+			winston.warn('[write-api] /api/v1/topics/follow route has been deprecated, please use /api/v1/topics/:tid/follow instead.');
 			if (!utils.checkRequired(['tid'], req, res)) {
 				return false;
 			}
@@ -87,6 +101,7 @@ module.exports = function(middleware) {
 			});
 		})
 		.delete(apiMiddleware.requireUser, function(req, res) {
+			winston.warn('[write-api] /api/v1/topics/follow route has been deprecated, please use /api/v1/topics/:tid/follow instead.');
 			if (!utils.checkRequired(['tid'], req, res)) {
 				return false;
 			}

@@ -61,9 +61,7 @@
         * `DELETE /:tid`
             * Deletes a topic
             * Accepts: No parameters
-        * `POST /follow`
+        * `POST /:tid/follow`
             * Subscribes a user to a topic
-            * Accepts: `tid`
-        * `DELETE /follow`
+        * `DELETE /:tid/follow`
             * Unsubscribes a user to a topic
-            * Accepts: `tid`
