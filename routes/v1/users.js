@@ -48,6 +48,10 @@ module.exports = function(/*middleware*/) {
 
 	app.route('/:uid/chats')
 		.post(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['message'], req, res)) {
+				return false;
+			}
+
 			var timestamp = parseInt(req.body.timestamp, 10) || undefined;
 
 			Messaging.canMessage(req.user.uid, req.params.uid, function(err, allowed) {
