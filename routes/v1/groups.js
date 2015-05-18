@@ -16,7 +16,9 @@ module.exports = function(middleware) {
 			return false;
 		}
 
-		// Create a new group
+		Groups.create(req.body, function(err, groupObj) {
+			errorHandler.handle(err, res, groupObj);
+		});
 	});
 
 	app.post('/:slug/membership', apiMiddleware.requireUser, middleware.exposeGroupName, function(req, res) {

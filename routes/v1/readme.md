@@ -42,6 +42,9 @@
             * Updates a category's data
             * Accepts: `name`, `description`, `bgColor`, `color`, `parentCid`
     * `/groups`
+        * `POST /`
+            * Creates a new group
+            * Accepts: **name**, description, hidden, private, ownerUid
         * `POST /:slug/membership`
             * Joins a group (or requests membership if it is a private group)
             * Accepts: No parameters
