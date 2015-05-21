@@ -16,6 +16,13 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: `username`, `email`, `fullname`, `website`, `location`, `birthday`, `signature`
             * Also accepts any values exposed via the `action:user.updateProfile` hook
             * The `uid` specified in the route path is optional. Without it, the profile of the calling user is edited.
+        * `PUT /:uid/password`
+            * Change password
+            * Accepts: `currentPassword`, `newPassword`
+        * `PUT /:uid/password_reset`
+            * Change password
+            * Accepts: `newPassword`
+            * only admin has auth
         * `POST /:uid/follow`
             * Follows another user
             * **Accepts**: No parameters
