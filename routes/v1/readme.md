@@ -51,6 +51,9 @@ an administrative uid. All other uids passed in will result in an error.
             * Creates a new group
             * **Requires**: `name`
             * **Accepts**: `description`, `hidden`, `private`, `ownerUid`
+        * `DELETE /:slug`
+            * Deletes a group
+            * **Accepts**: No parameters
         * `POST /:slug/membership`
             * Joins a group (or requests membership if it is a private group)
             * **Accepts**: No parameters
