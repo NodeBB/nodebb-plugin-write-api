@@ -16,6 +16,10 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: `username`, `email`, `fullname`, `website`, `location`, `birthday`, `signature`
             * Also accepts any values exposed via the `action:user.updateProfile` hook
             * The `uid` specified in the route path is optional. Without it, the profile of the calling user is edited.
+        * `DELETE /:uid`
+            * Deletes a user from NodeBB
+            * **Accepts**: No parameters
+            * Can be called by either the target uid itself, or an administrative uid.
         * `POST /:uid/follow`
             * Follows another user
             * **Accepts**: No parameters

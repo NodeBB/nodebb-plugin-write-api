@@ -6,7 +6,8 @@ var Users = require.main.require('./src/user'),
 	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	auth = require('../../lib/auth'),
-	utils = require('./utils');
+	utils = require('./utils'),
+	async = require.main.require('async');
 
 
 module.exports = function(/*middleware*/) {
@@ -24,15 +25,34 @@ module.exports = function(/*middleware*/) {
 		});
 	});
 
-	app.put('/:uid?', apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
-		if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
-			return errorHandler.respond(401, res);
-		}
+	app.route('/:uid')
+		.put(apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+			if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
+				return errorHandler.respond(401, res);
+			}
 
-		Users.updateProfile(req.params.uid, req.body, function(err) {
-			return errorHandler.handle(err, res);
-		});
-	});
+			Users.updateProfile(req.params.uid, req.body, function(err) {
+				return errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+			if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
+				return errorHandler.respond(401, res);
+			}
+
+			// Clear out any user tokens belonging to the to-be-deleted user
+			async.waterfall([
+				async.apply(auth.getTokens, req.params.uid),
+				function(tokens, next) {
+					async.each(tokens, function(token, next) {
+						auth.revokeToken(token, 'user', next);
+					}, next);
+				},
+				async.apply(Users.delete, req.params.uid)
+			], function(err) {
+				return errorHandler.handle(err, res);
+			});
+		})
 
 	app.post('/:uid/follow', apiMiddleware.requireUser, function(req, res) {
 		Users.follow(req.user.uid, req.params.uid, function(err) {
