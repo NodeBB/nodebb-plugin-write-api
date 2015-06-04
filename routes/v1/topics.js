@@ -88,6 +88,22 @@ module.exports = function(middleware) {
 			});
 		});
 
+	app.route('/:tid/tags')
+		.post(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			if (!utils.checkRequired(['tags'], req, res)) {
+				return false;
+			}
+
+			Topics.updateTags(req.params.tid, req.body.tags, function(err) {
+				errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.deleteTopicTags(req.params.tid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		});
+
 	// **DEPRECATED** Do not use.
 	app.route('/follow')
 		.post(apiMiddleware.requireUser, function(req, res) {

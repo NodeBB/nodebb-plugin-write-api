@@ -82,3 +82,10 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:tid/follow`
             * Unsubscribes a user to a topic
             * **Accepts**: No parameters
+        * `POST /:tid/tags`
+            * Creates or update tags in a topic
+            * **Requires**: `tags`
+            * This method does not *append* tags, it *replaces* the tag set associated with the topic
+        * `DELETE /:tid/tags`
+            * **Accepts**: No parameters
+            * Clears the tag set associates with a topic
