@@ -2,7 +2,9 @@
 /* globals module, require */
 
 var passport = require.main.require('passport'),
+	async = require.main.require('async'),
 	user = require.main.require('./src/user'),
+	groups = require.main.require('./src/groups'),
 	topics = require.main.require('./src/topics'),
 	errorHandler = require('../../lib/errorHandler'),
 
@@ -52,7 +54,7 @@ Middleware.requireAdmin = function(req, res, next) {
 
 	user.isAdministrator(req.user.uid, function(err, isAdmin) {
 		if (err || !isAdmin) {
-			return errorHandler.respond(401, res);
+			return errorHandler.respond(403, res);
 		}
 
 		next();
@@ -91,6 +93,31 @@ Middleware.validateTid = function(req, res, next) {
 	} else {
 		errorHandler.respond(404, res);
 	}
+};
+
+Middleware.validateGroup = function(req, res, next) {
+	if (res.locals.groupName) {
+		next();
+	} else {
+		errorHandler.respond(404, res);
+	}
+};
+
+Middleware.requireGroupOwner = function(req, res, next) {
+	if (!req.user || !req.user.uid) {
+		errorHandler.respond(401, res);
+	}
+
+	async.parallel({
+		isAdmin: async.apply(user.isAdministrator, req.user.uid),
+		isOwner: async.apply(groups.ownership.isOwner, req.user.uid, res.locals.groupName)
+	}, function(err, checks) {
+		if (checks.isOwner || checks.isAdmin) {
+			next();
+		} else {
+			errorHandler.respond(403, res);
+		}
+	});
 };
 
 module.exports = Middleware;
