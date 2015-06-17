@@ -53,5 +53,11 @@ module.exports = function(middleware) {
 		});
 	});
 
+	app.delete('/:slug', apiMiddleware.requireUser, middleware.exposeGroupName, function(req, res) {
+		Groups.destroy(res.locals.groupName, function(err){
+			return errorHandler.handle(err, res);
+		});
+	});
+
 	return app;
 };
