@@ -4,6 +4,8 @@
 var	passport = module.parent.require('passport'),
 	BearerStrategy = require('passport-http-bearer').Strategy,
 
+	meta = require.main.require('./src/meta'),
+
 	auth = require('./lib/auth'),
 	sockets = require('./lib/sockets'),
 
@@ -26,6 +28,7 @@ API.init = function(data, callback) {
 	require('./routes/admin')(data.router, data.middleware);	// ACP
 	sockets.init();	// WebSocket listeners
 
+	API.reloadSettings();
 	callback();
 };
 
@@ -41,6 +44,14 @@ API.addMenuItem = function(custom_header, callback) {
 
 API.authenticate = function(data) {
 	require('./routes/v1/middleware').requireUser(data.req, data.res, data.next);
+};
+
+API.reloadSettings = function(hash) {
+	if (!hash || hash === 'settings:writeapi') {
+		meta.settings.get('writeapi', function(err, settings) {
+			API.settings = settings;
+		});
+	}
 };
 
 module.exports = API;

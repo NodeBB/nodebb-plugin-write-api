@@ -19,11 +19,7 @@ define('admin/plugins/write-api', ['settings'], function(Settings) {
 				app.alert({
 					type: 'success',
 					alert_id: 'writeapi-saved',
-					title: 'Settings Saved',
-					message: 'Please reload your NodeBB to apply these settings',
-					clickfn: function() {
-						socket.emit('admin.reload');
-					}
+					title: 'Settings Saved'
 				});
 			});
 		});

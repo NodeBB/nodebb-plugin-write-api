@@ -3,9 +3,19 @@
 
 var apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
-	plugins = require.main.require('./src/plugins');
+	plugins = require.main.require('./src/plugins'),
+	writeApi = module.parent.parent.exports;
 
 module.exports = function(app, coreMiddleware) {
+	app.use(function(req, res, next) {
+		if (writeApi.settings.requireHttps === 'on' && req.protocol !== 'https') {
+			res.set('Upgrade', 'TLS/1.0, HTTP/1.1');
+			return errorHandler.respond(426, res);
+		} else {
+			next();
+		}
+	});
+
 	app.use('/users', require('./users')(coreMiddleware));
 	app.use('/groups', require('./groups')(coreMiddleware));
 	app.use('/posts', require('./posts')(coreMiddleware));

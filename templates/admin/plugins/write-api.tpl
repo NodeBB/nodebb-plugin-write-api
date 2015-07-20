@@ -1,6 +1,20 @@
 <div class="row">
 	<div class="col-lg-5">
 		<div class="panel panel-default">
+			<div class="panel-heading">Write API Settings</div>
+			<div class="panel-body">
+				<form role="form" class="writeapi-settings">
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="requireHttps"> Require API usage via HTTPS only
+						</label>
+					</div>
+				</form>
+				<button type="button" class="pull-right btn btn-primary" id="save">Save</button>
+			</div>
+		</div>
+
+		<div class="panel panel-default">
 			<div class="panel-heading">Active Tokens</div>
 			<div class="panel-body">
 				<table class="table table-striped">
