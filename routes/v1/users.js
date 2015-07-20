@@ -93,7 +93,7 @@ module.exports = function(/*middleware*/) {
 
 	app.route('/:uid/tokens')
 		.get(apiMiddleware.requireUser, function(req, res) {
-			if (parseInt(req.params.uid, 10) !== req.user.uid) {
+			if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10)) {
 				return errorHandler.respond(401, res);
 			}
 
