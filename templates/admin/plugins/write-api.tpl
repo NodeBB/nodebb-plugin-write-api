@@ -9,6 +9,22 @@
 							<input type="checkbox" name="requireHttps"> Require API usage via HTTPS only
 						</label>
 					</div>
+					<hr />
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" name="jwt:enabled"> Enable authentication via <a href="http://jwt.io">JSON Web Tokens</a>
+						</label>
+					</div>
+					<div class="form-group">
+						<label for="jwt:secret">JSON Web Token Secret</label>
+						<input type="text" class="form-control" name="jwt:secret" id="jwt:secret" />
+					</div>
+					<p class="help-block">
+						JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims securely between two parties.
+						To make requests with a JSON Web Token instead of a user/master token, sign the entire request payload with the same
+						secret as defined in the plugin, and either send it in the <code>POST</code> body, or as a query string parameter. In both cases,
+						the key `token` is used.
+					</p>
 				</form>
 				<button type="button" class="pull-right btn btn-primary" id="save">Save</button>
 			</div>

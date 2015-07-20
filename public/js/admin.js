@@ -19,7 +19,8 @@ define('admin/plugins/write-api', ['settings'], function(Settings) {
 				app.alert({
 					type: 'success',
 					alert_id: 'writeapi-saved',
-					title: 'Settings Saved'
+					title: 'Settings Saved',
+					timeout: 2500
 				});
 			});
 		});

@@ -26,6 +26,7 @@
   "homepage": "https://github.com/julianlam/nodebb-plugin-write-api",
   "dependencies": {
     "express": "^4.12.0",
+    "jsonwebtoken": "^5.0.4",
     "passport-http-bearer": "^1.0.1"
   },
   "nbbpm": {

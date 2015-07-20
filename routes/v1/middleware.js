@@ -3,48 +3,79 @@
 
 var passport = require.main.require('passport'),
 	async = require.main.require('async'),
+	jwt = require('jsonwebtoken'),
 	user = require.main.require('./src/user'),
 	groups = require.main.require('./src/groups'),
 	topics = require.main.require('./src/topics'),
 	errorHandler = require('../../lib/errorHandler'),
 
+	writeApi = module.parent.parent.parent.exports,
 	Middleware = {};
 
 Middleware.requireUser = function(req, res, next) {
-	passport.authenticate('bearer', { session: false }, function(err, user) {
-		if (err) { return next(err); }
-		if (!user) { return errorHandler.respond(401, res); }
+	if (req.headers.hasOwnProperty('authorization')) {
+		passport.authenticate('bearer', { session: false }, function(err, user) {
+			if (err) { return next(err); }
+			if (!user) { return errorHandler.respond(401, res); }
 
-		// If the token received was a master token, a _uid must also be present for all calls
-		if (user.hasOwnProperty('uid')) {
-			req.login(user, function(err) {
-				if (err) { return errorHandler.respond(500, res); }
-
-				req.uid = user.uid;
-				next();
-			});
-		} else if (user.hasOwnProperty('master') && user.master === true) {
-			if (req.body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
-				user.uid = req.body._uid || req.query._uid;
-				delete user.master;
-
+			// If the token received was a master token, a _uid must also be present for all calls
+			if (user.hasOwnProperty('uid')) {
 				req.login(user, function(err) {
 					if (err) { return errorHandler.respond(500, res); }
 
 					req.uid = user.uid;
 					next();
 				});
+			} else if (user.hasOwnProperty('master') && user.master === true) {
+				if (req.body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
+					user.uid = req.body._uid || req.query._uid;
+					delete user.master;
+
+					req.login(user, function(err) {
+						if (err) { return errorHandler.respond(500, res); }
+
+						req.uid = user.uid;
+						next();
+					});
+				} else {
+					res.status(400).json(errorHandler.generate(
+						400, 'params-missing',
+						'Required parameters were missing from this API call, please see the "params" property',
+						['_uid']
+					));
+				}
 			} else {
-				res.status(400).json(errorHandler.generate(
-					400, 'params-missing',
-					'Required parameters were missing from this API call, please see the "params" property',
-					['_uid']
-				));
+				return errorHandler.respond(500, res);
 			}
-		} else {
-			return errorHandler.respond(500, res);
-		}
-	})(req, res, next);
+		})(req, res, next);
+	} else if (writeApi.settings['jwt:enabled'] === 'on' && writeApi.settings.hasOwnProperty('jwt:secret')) {
+		var token = req.query.token || req.body.token;
+		jwt.verify(token, writeApi.settings['jwt:secret'], function(err, decoded) {
+			if (!err && decoded) {
+				if (!decoded.hasOwnProperty('_uid')) {
+					return res.status(400).json(errorHandler.generate(
+						400, 'params-missing',
+						'Required parameters were missing from this API call, please see the "params" property',
+						['_uid']
+					));
+				}
+
+				req.login({
+					uid: decoded._uid
+				}, function(err) {
+					if (err) { return errorHandler.respond(500, res); }
+
+					req.uid = decoded._uid
+					req.body = decoded;
+					next();
+				});
+			} else {
+				errorHandler.respond(401, res);
+			}
+		});
+	} else {
+		errorHandler.respond(401, res);
+	}
 };
 
 Middleware.requireAdmin = function(req, res, next) {
