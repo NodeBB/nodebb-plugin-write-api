@@ -46,7 +46,7 @@ an administrative uid. All other uids passed in will result in an error.
         * `POST /`
             * Creates a new category
             * **Requires**: `name`
-            * **Accepts**: `description`, `bgColor`, `color`
+            * **Accepts**: `description`, `bgColor`, `color`, `parentCid`, `class`
         * `PUT /:cid`
             * Updates a category's data
             * **Accepts**: `name`, `description`, `bgColor`, `color`, `parentCid`
