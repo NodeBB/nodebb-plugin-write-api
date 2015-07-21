@@ -8,7 +8,7 @@ an administrative uid. All other uids passed in will result in an error.
     * `/users`
         * `POST /`
             * Creates a new user
-            * ***Requires**: `username`
+            * **Requires**: `username`
             * **Accepts**: `password`, `email`
             * Any other data passed in will be saved into the user hash
         * `PUT /:uid`
