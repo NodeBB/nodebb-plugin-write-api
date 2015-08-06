@@ -21,7 +21,8 @@ module.exports = function(middleware) {
 					cid: req.body.cid,
 					title: req.body.title,
 					content:req.body.content,
-					uid: req.user.uid
+					uid: req.user.uid,
+					timestamp: req.body.timestamp
 				};
 
 			Topics.post(payload, function(err, data) {
@@ -61,7 +62,8 @@ module.exports = function(middleware) {
 					tid: req.params.tid,
 					uid: req.user.uid,
 					req: req,	// For IP recording
-					content: req.body.content
+					content: req.body.content,
+					timestamp: req.body.timestamp
 				};
 
 			if (req.body.toPid) { payload.toPid = req.body.toPid; }
