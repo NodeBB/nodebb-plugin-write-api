@@ -92,12 +92,12 @@ module.exports = function(/*middleware*/) {
 		});
 
 	app.route('/:uid/ban')
-		.post(apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+		.post(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
 			Users.ban(req.params.uid, function(err) {
 				errorHandler.handle(err, res);
 			});
 		})
-		.delete(apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
 			Users.unban(req.params.uid, function(err) {
 				errorHandler.handle(err, res);
 			});
