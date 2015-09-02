@@ -52,7 +52,21 @@ module.exports = function(/*middleware*/) {
 			], function(err) {
 				return errorHandler.handle(err, res);
 			});
-		})
+		});
+
+	app.put('/:uid/password', apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+		if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
+			return errorHandler.respond(401, res);
+		}
+
+		Users.changePassword(req.user.uid, {
+			uid: req.params.uid,
+			currentPassword: req.body.current || '',
+			newPassword: req.body['new'] || ''
+		}, function(err) {
+			errorHandler.handle(err, res);
+		});
+	});
 
 	app.post('/:uid/follow', apiMiddleware.requireUser, function(req, res) {
 		Users.follow(req.user.uid, req.params.uid, function(err) {

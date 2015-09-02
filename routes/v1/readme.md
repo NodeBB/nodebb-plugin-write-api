@@ -20,6 +20,11 @@ an administrative uid. All other uids passed in will result in an error.
             * Deletes a user from NodeBB
             * **Accepts**: No parameters
             * Can be called by either the target uid itself, or an administrative uid.
+        * `PUT /:uid/password`
+            * Changes a user's password
+            * **Requires**: `uid`, `new`
+            * **Accepts**: `current`
+            * `current` is required if the calling user is not an administrator
         * `POST /:uid/follow`
             * Follows another user
             * **Accepts**: No parameters
@@ -32,6 +37,10 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: `timestamp`, `quiet`
             * `timestamp` (unix timestamp in ms) allows messages to be sent from the past (useful when importing chats)
             * `quiet` if set, will not notify the user that a chat message has been received (also useful during imports)
+        * `POST /:uid/ban`
+            * Bans a user
+        * `DELETE /:uid/ban`
+            * Unbans a user
         * `GET /:uid/tokens`
             * Retrieves a list of active tokens for that user
             * **Accepts**: No parameters
