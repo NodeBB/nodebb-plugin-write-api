@@ -49,8 +49,10 @@ Middleware.requireUser = function(req, res, next) {
 			}
 		})(req, res, next);
 	} else if (writeApi.settings['jwt:enabled'] === 'on' && writeApi.settings.hasOwnProperty('jwt:secret')) {
-		var token = req.query.token || req.body.token;
-		jwt.verify(token, writeApi.settings['jwt:secret'], function(err, decoded) {
+		var token = (writeApi.settings['jwt:payloadKey'] ? (req.query[writeApi.settings['jwt:payloadKey']] || req.body[writeApi.settings['jwt:payloadKey']]) : null) || req.query.token || req.body.token;
+		jwt.verify(token, writeApi.settings['jwt:secret'], {
+			ignoreExpiration: true,
+		}, function(err, decoded) {
 			if (!err && decoded) {
 				if (!decoded.hasOwnProperty('_uid')) {
 					return res.status(400).json(errorHandler.generate(

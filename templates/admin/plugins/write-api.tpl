@@ -19,6 +19,10 @@
 						<label for="jwt:secret">JSON Web Token Secret</label>
 						<input type="text" class="form-control" name="jwt:secret" id="jwt:secret" />
 					</div>
+					<div class="form-group">
+						<label for="jwt:payloadKey">JSON Web Token Payload Key</label>
+						<input type="text" class="form-control" name="jwt:payloadKey" id="jwt:payloadKey" placeholder="Default: token" />
+					</div>
 					<p class="help-block">
 						JSON Web Tokens are an open, industry standard RFC 7519 method for representing claims securely between two parties.
 						To make requests with a JSON Web Token instead of a user/master token, sign the entire request payload with the same
