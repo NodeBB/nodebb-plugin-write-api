@@ -1,7 +1,7 @@
 'use strict';
 /* globals module, require */
 
-var PostTools = require.main.require('./src/postTools'),
+var posts = require.main.require('./src/posts'),
 	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
@@ -27,7 +27,7 @@ module.exports = function(middleware) {
 		if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
 		if (req.body.tags) { payload.options.tags = req.body.tags; }
 
-		PostTools.edit(payload, function(err) {
+		posts.edit(payload, function(err) {
 			errorHandler.handle(err, res);
 		});
 	});
