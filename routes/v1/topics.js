@@ -2,7 +2,7 @@
 /* globals module, require */
 
 var Topics = require.main.require('./src/topics'),
-	PostTools = require.main.require('./src/postTools'),
+	Posts = require.main.require('./src/posts'),
 	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils'),
@@ -47,7 +47,7 @@ module.exports = function(middleware) {
 			if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
 			if (req.body.tags) { payload.options.tags = req.body.tags; }
 
-			PostTools.edit(payload, function(err, returnData) {
+			Posts.edit(payload, function(err, returnData) {
 				errorHandler.handle(err, res, returnData);
 			});
 		});
