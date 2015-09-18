@@ -54,4 +54,13 @@ API.reloadSettings = function(hash) {
 	}
 };
 
+/* Allow the following fields to be writable. */
+API.EnableUserFieldsToWrite = function (data, callback) {
+	data.fields.push('picture');
+	data.fields.push('uploadedpicture');
+
+	// TODO: Enable settings to be writable.
+	callback(null, data);
+};
+
 module.exports = API;
