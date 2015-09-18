@@ -38,7 +38,6 @@ API.addMenuItem = function(custom_header, callback) {
 		icon: 'fa-cogs',
 		name: 'Write API'
 	});
-
 	callback(null, custom_header);
 };
 
@@ -58,8 +57,6 @@ API.reloadSettings = function(hash) {
 API.EnableUserFieldsToWrite = function (data, callback) {
 	data.fields.push('picture');
 	data.fields.push('uploadedpicture');
-
-	// TODO: Enable settings to be writable.
 	callback(null, data);
 };
 

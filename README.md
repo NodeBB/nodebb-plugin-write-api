@@ -24,7 +24,7 @@ $ npm install passport-http-bearer jsonwebtoken
 
 # API Resources
 
-* [`api/v1` Endpoints](routes/v1/readme.md)
+* [`api/v1` Endpoints](routes/v1/README.md)
 
 # Quick Start
 

@@ -54,6 +54,19 @@ module.exports = function(/*middleware*/) {
 			});
 		});
 
+	app.put('/:uid/settings', apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function (req, res) {
+		if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
+			return errorHandler.respond(401, res);
+		}
+
+		Object.keys(req.body).forEach(function (key) {
+			if (key === '_uid') { return; }
+			Users.setSetting(req.params.uid, key, req.body[key], function (err) {
+				errorHandler.handle(err, res);
+			});
+		});
+	});
+
 	app.put('/:uid/password', apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
 		if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
 			return errorHandler.respond(401, res);

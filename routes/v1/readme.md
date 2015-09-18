@@ -20,6 +20,9 @@ an administrative uid. All other uids passed in will result in an error.
             * Deletes a user from NodeBB
             * **Accepts**: No parameters
             * Can be called by either the target uid itself, or an administrative uid.
+        * `PUT /:uid/settings`
+            * Updates a user's settings
+            * **Accepts**: Any settings exposed by NodeBB
         * `PUT /:uid/password`
             * Changes a user's password
             * **Requires**: `uid`, `new`
