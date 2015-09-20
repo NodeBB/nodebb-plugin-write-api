@@ -7,6 +7,7 @@ var Users = require.main.require('./src/user'),
 	errorHandler = require('../../lib/errorHandler'),
 	auth = require('../../lib/auth'),
 	utils = require('./utils'),
+	_utils = require.main.require('./public/src/utils'),
 	async = require.main.require('async');
 
 
@@ -18,9 +19,14 @@ module.exports = function(/*middleware*/) {
 			return false;
 		}
 
+		// An invalid username shouldn't cause a 500 error.
+		if (!_utils.isUserNameValid(req.body.username)) {
+			return errorHandler.respond(400, res);
+		}
+
 		Users.create(req.body, function(err, uid) {
 			return errorHandler.handle(err, res, {
-				uid: uid
+				uid: uid, username: _utils.slugify(req.body.username)
 			});
 		});
 	});
