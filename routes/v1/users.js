@@ -8,8 +8,8 @@ var Users = require.main.require('./src/user'),
 	auth = require('../../lib/auth'),
 	utils = require('./utils'),
 	_utils = require.main.require('./public/src/utils'),
-	async = require.main.require('async');
-
+	async = require.main.require('async'),
+	_ = require.main.require('underscore');
 
 module.exports = function(/*middleware*/) {
 	var app = require('express').Router();
@@ -65,11 +65,30 @@ module.exports = function(/*middleware*/) {
 			return errorHandler.respond(401, res);
 		}
 
-		Object.keys(req.body).forEach(function (key) {
-			if (key === '_uid') { return; }
-			Users.setSetting(req.params.uid, key, req.body[key], function (err) {
-				errorHandler.handle(err, res);
-			});
+		async.waterfall([
+			function (next) {
+				Users.getSettings(req.params.uid, next);
+			},
+			function (settings, next) {
+				delete req.body._uid;
+				_.extend(settings, req.body);
+
+				settings.followTopicsOnCreate = settings.followTopicsOnCreate | 0;
+				settings.followTopicsOnReply = settings.followTopicsOnReply | 0;
+				settings.notificationSounds = settings.notificationSounds | 0;
+				settings.openOutgoingLinksInNewTab = settings.openOutgoingLinksInNewTab | 0;
+				settings.restrictChat = settings.restrictChat | 0;
+				settings.sendChatNotifications = settings.sendChatNotifications | 0;
+				settings.sendPostNotifications = settings.sendPostNotifications | 0;
+				settings.showemail = settings.showemail | 0;
+				settings.showfullname = settings.showfullname | 0;
+				settings.topicSearchEnabled = settings.topicSearchEnabled | 0;
+				settings.usePagination = settings.usePagination | 0;
+
+				Users.saveSettings(req.params.uid, settings, next);
+			}
+		], function (err) {
+			errorHandler.handle(err, res);
 		});
 	});
 
