@@ -26,7 +26,7 @@ module.exports = function(/*middleware*/) {
 
 		Users.create(req.body, function(err, uid) {
 			return errorHandler.handle(err, res, {
-				uid: uid, username: _utils.slugify(req.body.username)
+				uid: uid, userslug: _utils.slugify(req.body.username)
 			});
 		});
 	});
@@ -37,8 +37,8 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.respond(401, res);
 			}
 
-			Users.updateProfile(req.params.uid, req.body, function(err) {
-				return errorHandler.handle(err, res);
+			Users.updateProfile(req.params.uid, req.body, function(err, user) {
+				return errorHandler.handle(err, res, user);
 			});
 		})
 		.delete(apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
