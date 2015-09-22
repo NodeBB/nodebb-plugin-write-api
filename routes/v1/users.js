@@ -84,6 +84,7 @@ module.exports = function(/*middleware*/) {
 				settings.showfullname = settings.showfullname | 0;
 				settings.topicSearchEnabled = settings.topicSearchEnabled | 0;
 				settings.usePagination = settings.usePagination | 0;
+				settings.groupTitle = settings.groupTitle || '';
 
 				Users.saveSettings(req.params.uid, settings, next);
 			}
