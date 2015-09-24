@@ -1,20 +1,36 @@
 {
-	"id": "nodebb-plugin-write-api",
-	"name": "NodeBB Write-Enabled API",
-	"description": "A RESTful JSON-speaking API allowing you to write things to NodeBB",
-	"url": "https://github.com/julianlam/nodebb-plugin-write-api",
-	"library": "./index.js",
-	"templates": "templates",
-	"hooks": [
-		{ "hook": "static:app.load", "method": "init" },
-		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
-		{ "hook": "action:middleware.authenticate", "method": "authenticate"},
-		{ "hook": "action:settings.set", "method": "reloadSettings" }
-	],
-	"less": [
-		"./less/style.less"
-	],
-	"scripts": [
-		"public/js/admin.js"
-	]
+  "id": "nodebb-plugin-write-api",
+  "name": "NodeBB Write-Enabled API",
+  "description": "A RESTful JSON-speaking API allowing you to write things to NodeBB",
+  "url": "https://github.com/julianlam/nodebb-plugin-write-api",
+  "library": "./index.js",
+  "templates": "templates",
+  "hooks": [
+    {
+      "hook": "static:app.load",
+      "method": "init"
+    },
+    {
+      "hook": "filter:admin.header.build",
+      "method": "addMenuItem"
+    },
+    {
+      "hook": "action:middleware.authenticate",
+      "method": "authenticate"
+    },
+    {
+      "hook": "action:settings.set",
+      "method": "reloadSettings"
+    },
+    {
+      "hook": "filter:user.updateProfile",
+      "method": "EnableUserFieldsToWrite"
+    }
+  ],
+  "less": [
+    "./less/style.less"
+  ],
+  "scripts": [
+    "public/js/admin.js"
+  ]
 }

@@ -38,7 +38,6 @@ API.addMenuItem = function(custom_header, callback) {
 		icon: 'fa-cogs',
 		name: 'Write API'
 	});
-
 	callback(null, custom_header);
 };
 
@@ -52,6 +51,13 @@ API.reloadSettings = function(hash) {
 			API.settings = settings;
 		});
 	}
+};
+
+/* Allow the following fields to be writable. */
+API.EnableUserFieldsToWrite = function (data, callback) {
+	data.fields.push('picture');
+	data.fields.push('uploadedpicture');
+	callback(null, data);
 };
 
 module.exports = API;
