@@ -8,16 +8,12 @@ With this plugin, however, you can create content on NodeBB externally (new topi
 
 # Installation
 
-**Install this plugin via the plugins page in the ACP.**
-
-Alternatively:
-
 ```bash
-$ cd /path/to/nodebb/node_modules
-$ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
+cd /path/to/nodebb/node_modules
+git clone git@github.com:davidvuong/nodebb-plugin-write-api.git
 
-$ cd ..
-$ npm install passport-http-bearer jsonwebtoken
+cd ..
+npm install passport-http-bearer jsonwebtoken
 
 # Then start NodeBB and activate the plugin
 ```
