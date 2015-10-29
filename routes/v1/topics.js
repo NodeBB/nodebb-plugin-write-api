@@ -28,28 +28,6 @@ module.exports = function(middleware) {
 			Topics.post(payload, function(err, data) {
 				return errorHandler.handle(err, res, data);
 			});
-		})
-		.put(apiMiddleware.requireUser, function(req, res) {
-			if (!utils.checkRequired(['pid', 'content'], req, res)) {
-				return false;
-			}
-
-			var payload = {
-				uid: req.user.uid,
-				pid: req.body.pid,
-				content: req.body.content,
-				options: {}
-			};
-
-			// Maybe a "set if available" utils method may come in handy
-			if (req.body.handle) { payload.handle = req.body.handle; }
-			if (req.body.title) { payload.title = req.body.title; }
-			if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
-			if (req.body.tags) { payload.options.tags = req.body.tags; }
-
-			Posts.edit(payload, function(err, returnData) {
-				errorHandler.handle(err, res, returnData);
-			});
 		});
 
 	app.route('/:tid')
@@ -75,6 +53,29 @@ module.exports = function(middleware) {
 		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
 			Topics.delete(req.params.tid, function(err) {
 				errorHandler.handle(err, res);
+			});
+		})
+		.put(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['pid', 'content'], req, res)) {
+				return false;
+			}
+
+			var payload = {
+				uid: req.user.uid,
+				pid: req.body.pid,
+				content: req.body.content,
+				options: {}
+			};
+			console.log(payload);
+
+			// Maybe a "set if available" utils method may come in handy
+			if (req.body.handle) { payload.handle = req.body.handle; }
+			if (req.body.title) { payload.title = req.body.title; }
+			if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
+			if (req.body.tags) { payload.options.tags = req.body.tags; }
+
+			Posts.edit(payload, function(err, returnData) {
+				errorHandler.handle(err, res, returnData);
 			});
 		});
 
