@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-write-api",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Write-enabled API for NodeBB",
   "main": "index.js",
   "scripts": {
