@@ -15,6 +15,8 @@ Alternatively:
 ```
 $ cd /path/to/nodebb/node_modules
 $ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
+$ cd nodebb-plugin-write-api
+$ npm i
 
 # Then start NodeBB and activate the plugin
 ```
