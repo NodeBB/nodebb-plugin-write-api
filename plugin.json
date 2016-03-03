@@ -14,7 +14,7 @@
 	"less": [
 		"./less/style.less"
 	],
-	"scripts": [
+	"acpScripts": [
 		"public/js/admin.js"
 	]
 }
