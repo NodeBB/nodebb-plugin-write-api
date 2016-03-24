@@ -20,7 +20,8 @@ module.exports = function(middleware) {
 			var payload = {
 					cid: req.body.cid,
 					title: req.body.title,
-					content:req.body.content,
+					content: req.body.content,
+					tags: req.body.tags || [],
 					uid: req.user.uid,
 					timestamp: req.body.timestamp
 				};
