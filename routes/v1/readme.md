@@ -101,11 +101,11 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:tid/tags`
             * **Accepts**: No parameters
             * Clears the tag set associates with a topic
-	* `/posts`
-		* `PUT /:pid`
-			* Edits a post by post ID
-			* **Requires**: `content`
-			* **Accepts**: `title`, `topic_thumb`, `tags`
-		* `DELETE /:pid`
-			* Deletes a post
-			* **Accepts**: No parameters
+    * `/posts`
+        * `PUT /:pid`
+            * Edits a post by post ID
+            * **Requires**: `content`
+            * **Accepts**: `title`, `topic_thumb`, `tags`
+        * `DELETE /:pid`
+            * Deletes a post
+            * **Accepts**: No parameters
