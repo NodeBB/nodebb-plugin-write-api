@@ -77,6 +77,7 @@ an administrative uid. All other uids passed in will result in an error.
         * `POST /`
             * Creates a new topic
             * **Requires**: `cid`, `title`, `content`
+            * **Accepts**: `tags (array)`
         * `POST /:tid`
             * Posts a new reply to the topic
             * **Requires**: `content`
