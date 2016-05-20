@@ -52,7 +52,7 @@ module.exports = function(middleware) {
 			});
 		})
 		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
-			Topics.delete(req.params.tid, function(err) {
+			Topics.delete(req.params.tid, req.params._uid, function(err) {
 				errorHandler.handle(err, res);
 			});
 		})
