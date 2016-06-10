@@ -25,7 +25,7 @@
 							return next(null, []);
 						}
 
-						User.getMultipleUserFields(uids, ['uid', 'username', 'picture'], next);
+						User.getUsersFields(uids, ['uid', 'username', 'picture'], next);
 					});
 				},
 				documentation: function(next) {
