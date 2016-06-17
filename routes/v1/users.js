@@ -86,21 +86,21 @@ module.exports = function(/*middleware*/) {
 				return false;
 			}
 
-			var timestamp = parseInt(req.body.timestamp, 10) || undefined;
+			var timestamp = parseInt(req.body.timestamp, 10) || Date.now();
 
-			Messaging.canMessage(req.user.uid, req.params.uid, function(err, allowed) {
+			Messaging.canMessageUser(req.user.uid, req.params.uid, function(err) {
 				if (err) {
 					return errorHandler.handle(err, res);
-				} else if (!allowed) {
-					return errorHandler.respond(403, res);
 				}
 
-				Messaging.addMessage(req.user.uid, req.params.uid, req.body.message, timestamp, function(err, message) {
-					if (parseInt(req.body.quiet, 10) !== 1 && !timestamp) {
-						Messaging.notifyUser(req.user.uid, req.params.uid, message);
-					}
+				Messaging.newRoom(req.user.uid, [req.params.uid], function(err, roomId) {
+					Messaging.addMessage(req.user.uid, roomId, req.body.message, timestamp, function(err, message) {
+						if (parseInt(req.body.quiet, 10) !== 1 && !timestamp) {
+							Messaging.notifyUsersInRoom(req.user.uid, roomId, message);
+						}
 
-					return errorHandler.handle(err, res, message);
+						return errorHandler.handle(err, res, message);
+					});
 				});
 			});
 		});
