@@ -7,6 +7,7 @@ var passport = require.main.require('passport'),
 	user = require.main.require('./src/user'),
 	groups = require.main.require('./src/groups'),
 	topics = require.main.require('./src/topics'),
+	categories = require.main.require('./src/categories'),
 	errorHandler = require('../../lib/errorHandler'),
 
 	writeApi = module.parent.parent.parent.exports,
@@ -115,6 +116,22 @@ Middleware.exposeAdmin = function(req, res, next) {
 Middleware.validateTid = function(req, res, next) {
 	if (req.params.hasOwnProperty('tid')) {
 		topics.exists(req.params.tid, function(err, exists) {
+			if (err) {
+				errorHandler.respond(500, res);
+			} else if (!exists) {
+				errorHandler.respond(404, res);
+			} else {
+				next();
+			}
+		});
+	} else {
+		errorHandler.respond(404, res);
+	}
+};
+
+Middleware.validateCid = function(req, res, next) {
+	if (req.params.hasOwnProperty('cid')) {
+		categories.exists(req.params.cid, function(err, exists) {
 			if (err) {
 				errorHandler.respond(500, res);
 			} else if (!exists) {

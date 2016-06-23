@@ -68,6 +68,20 @@ When the API encounters an error, it will do it's best to report what went wrong
 
 # Changelog
 
+## v4.2
+
+* Fix bug with topic deletion
+* Introduced support for category enable/disable, and category purge (deletion)
+
+## v4.1
+
+* Allow addition of tags when creating topics
+* Handling post deletion via API
+
+## v3.x to v4.x
+
+* Made compatible with NodeBB v1.0.0
+
 ## v3.1
 
 * Introduced support for JSON Web Tokens

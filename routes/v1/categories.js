@@ -20,14 +20,42 @@ module.exports = function(/*middleware*/) {
 		});
 	});
 
-	app.put('/:cid', apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
-		var payload = {};
-		payload[req.params.cid] = req.body;
+	app.route('/:cid')
+		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+			var payload = {};
+			payload[req.params.cid] = req.body;
 
-		Categories.update(payload, function(err) {
-			return errorHandler.handle(err, res);
+			Categories.update(payload, function(err) {
+				return errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+			Categories.purge(req.params.cid, req.user.uid, function(err) {
+				return errorHandler.handle(err, res);
+			});
 		});
-	});
+
+	app.route('/:cid/state')
+		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+			var payload = {};
+			payload[req.params.cid] = {
+				disabled: 0
+			};
+
+			Categories.update(payload, function(err) {
+				return errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+			var payload = {};
+			payload[req.params.cid] = {
+				disabled: 1
+			};
+
+			Categories.update(payload, function(err) {
+				return errorHandler.handle(err, res);
+			});
+		});
 
 	return app;
 };

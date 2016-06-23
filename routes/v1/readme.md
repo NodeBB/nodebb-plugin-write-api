@@ -17,7 +17,7 @@ an administrative uid. All other uids passed in will result in an error.
             * Also accepts any values exposed via the `action:user.updateProfile` hook
             * The `uid` specified in the route path is optional. Without it, the profile of the calling user is edited.
         * `DELETE /:uid`
-            * Deletes a user from NodeBB
+            * Deletes a user from NodeBB (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
             * Can be called by either the target uid itself, or an administrative uid.
         * `PUT /:uid/password`
@@ -59,13 +59,22 @@ an administrative uid. All other uids passed in will result in an error.
         * `PUT /:cid`
             * Updates a category's data
             * **Accepts**: `name`, `description`, `bgColor`, `color`, `parentCid`
+        * `DELETE /:cid`
+            * Purges a category, including all topics and posts inside of it (**Careful**: There is no confirmation!)
+            * **Accepts**: No parameters
+        * `PUT /:cid/state`
+            * Enables a category
+            * **Accepts**: No parameters
+        * `DELETE /:cid/state`
+            * Disables a category
+            * **Accepts**: No parameters
     * `/groups`
         * `POST /`
             * Creates a new group
             * **Requires**: `name`
             * **Accepts**: `description`, `hidden`, `private`, `ownerUid`
         * `DELETE /:slug`
-            * Deletes a group
+            * Deletes a group (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
         * `POST /:slug/membership`
             * Joins a group (or requests membership if it is a private group)
@@ -87,7 +96,7 @@ an administrative uid. All other uids passed in will result in an error.
             * **Requires**: `pid`, `content`
             * **Accepts**: `handle`, `title`, `topic_thumb`, `tags`
         * `DELETE /:tid`
-            * Deletes a topic
+            * Deletes a topic (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
         * `POST /:tid/follow`
             * Subscribes a user to a topic
@@ -108,5 +117,5 @@ an administrative uid. All other uids passed in will result in an error.
             * **Requires**: `content`
             * **Accepts**: `title`, `topic_thumb`, `tags`
         * `DELETE /:pid`
-            * Deletes a post
+            * Deletes a post (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
