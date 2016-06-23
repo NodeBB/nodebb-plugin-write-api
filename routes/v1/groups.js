@@ -32,24 +32,30 @@ module.exports = function(middleware) {
 			Groups.isPrivate(res.locals.groupName, function(err, isPrivate) {
 				if (isPrivate) {
 					Groups.requestMembership(res.locals.groupName, req.user.uid, function(err) {
-						return errorHandler.handle(err, res);
+						errorHandler.handle(err, res);
 					});
 				} else {
 					Groups.join(res.locals.groupName, req.user.uid, function(err) {
-						return errorHandler.handle(err, res);
+						errorHandler.handle(err, res);
 					});
 				}
 			});
 		} else {
 			Groups.join(res.locals.groupName, req.user.uid, function(err) {
-				return errorHandler.handle(err, res);
+				errorHandler.handle(err, res);
 			});
 		}
 	});
 
 	app.delete('/:slug/membership', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.validateGroup, function(req, res) {
-		Groups.leave(res.locals.groupName, req.user.uid, function(err) {
-			return errorHandler.handle(err, res);
+		Groups.isMember(req.user.uid, res.locals.groupName, function(err, isMember) {
+			if (isMember) {
+				Groups.leave(res.locals.groupName, req.user.uid, function(err) {
+					errorHandler.handle(err, res);
+				});
+			} else {
+				errorHandler.respond(400, res);
+			}
 		});
 	});
 
