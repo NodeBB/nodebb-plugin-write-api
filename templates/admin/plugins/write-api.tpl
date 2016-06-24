@@ -37,7 +37,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Active Tokens</div>
 			<div class="panel-body">
-				<table class="table table-striped">
+				<table class="table table-striped user-tokens">
 					<tr>
 						<th>User/Token</th>
 					</tr>
@@ -46,7 +46,11 @@
 						<td>
 							<div class="input-group">
 								<span class="input-group-addon">
-									<img class="img-circle write-api img-small" src="{tokens.user.picture}" title="{tokens.user.username} (uid {tokens.uid})">
+									<!-- IF tokens.user.picture -->
+									<img class="avatar avatar-sm avatar-rounded" src="{tokens.user.picture}" title="{tokens.user.username} (uid {tokens.uid})">
+									<!-- ELSE -->
+									<div class="avatar avatar-sm avatar-rounded" style="background-color: {tokens.user.icon:bgColor};">{tokens.user.icon:text}</div>
+									<!-- ENDIF tokens.user.picture -->
 								</span>
 								<input type="text" class="form-control" value="{tokens.access_token}" readonly />
 								<span class="input-group-btn">
