@@ -25,6 +25,10 @@ an administrative uid. All other uids passed in will result in an error.
             * **Requires**: `uid`, `new`
             * **Accepts**: `current`
             * `current` is required if the calling user is not an administrator
+        * `PUT /:uid/picture`
+            * Changes a user's picture
+            * **Requires**: `url`
+            * An image upload plugin must be installed on the target NodeBB (e.g. [Imgur](https://github.com/barisusakli/nodebb-plugin-imgur) / [Cloudinary](https://github.com/drlogout/nodebb-plugin-cloudinary))
         * `POST /:uid/follow`
             * Follows another user
             * **Accepts**: No parameters

@@ -68,6 +68,16 @@ module.exports = function(/*middleware*/) {
 		});
 	});
 
+	app.put('/:uid/picture', apiMiddleware.requireUser, apiMiddleware.exposeAdmin, function(req, res) {
+		if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid, 10) && !res.locals.isAdmin) {
+			return errorHandler.respond(401, res);
+		}
+
+		Users.uploadFromUrl(req.user.uid, req.body.url, function(err, uploadedImage) {
+			errorHandler.handle(err, res, uploadedImage);
+		});
+	});
+
 	app.post('/:uid/follow', apiMiddleware.requireUser, function(req, res) {
 		Users.follow(req.user.uid, req.params.uid, function(err) {
 			return errorHandler.handle(err, res);
