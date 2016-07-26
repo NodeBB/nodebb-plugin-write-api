@@ -10,10 +10,11 @@ var passport = require.main.require('passport'),
 	categories = require.main.require('./src/categories'),
 	errorHandler = require('../../lib/errorHandler'),
 
-	writeApi = module.parent.parent.parent.exports,
 	Middleware = {};
 
 Middleware.requireUser = function(req, res, next) {
+	var writeApi = require.main.require('nodebb-plugin-write-api');
+
 	if (req.headers.hasOwnProperty('authorization')) {
 		passport.authenticate('bearer', { session: false }, function(err, user) {
 			if (err) { return next(err); }
@@ -78,6 +79,46 @@ Middleware.requireUser = function(req, res, next) {
 		});
 	} else {
 		errorHandler.respond(401, res);
+	}
+};
+
+Middleware.associateUser = function(req, res, next) {
+	if (req.headers.hasOwnProperty('authorization')) {
+		passport.authenticate('bearer', { session: false }, function(err, user) {
+			if (err || !user) { return next(err); }
+
+			// If the token received was a master token, a _uid must also be present for all calls
+			if (user.hasOwnProperty('uid')) {
+				req.login(user, function(err) {
+					if (err) { return errorHandler.respond(500, res); }
+
+					req.uid = user.uid;
+					next();
+				});
+			} else if (user.hasOwnProperty('master') && user.master === true) {
+				if (req.body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
+					user.uid = req.body._uid || req.query._uid;
+					delete user.master;
+
+					req.login(user, function(err) {
+						if (err) { return errorHandler.respond(500, res); }
+
+						req.uid = user.uid;
+						next();
+					});
+				} else {
+					res.status(400).json(errorHandler.generate(
+						400, 'params-missing',
+						'Required parameters were missing from this API call, please see the "params" property',
+						['_uid']
+					));
+				}
+			} else {
+				return errorHandler.respond(500, res);
+			}
+		})(req, res, next);
+	} else {
+		return next();
 	}
 };
 

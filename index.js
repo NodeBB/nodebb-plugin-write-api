@@ -46,6 +46,8 @@ API.authenticate = function(data) {
 	require('./routes/v1/middleware').requireUser(data.req, data.res, data.next);
 };
 
+API.associateUser = require('./routes/v1/middleware').associateUser;
+
 API.reloadSettings = function(hash) {
 	if (!hash || hash === 'settings:writeapi') {
 		meta.settings.get('writeapi', function(err, settings) {
