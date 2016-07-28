@@ -48,7 +48,7 @@ module.exports = function(/*middleware*/) {
 						auth.revokeToken(token, 'user', next);
 					}, next);
 				},
-				async.apply(Users.delete, req.params.uid)
+				async.apply(Users.delete, req.user.uid, req.params.uid)
 			], function(err) {
 				return errorHandler.handle(err, res);
 			});
