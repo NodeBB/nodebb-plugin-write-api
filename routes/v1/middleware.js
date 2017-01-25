@@ -14,6 +14,7 @@ var passport = require.main.require('passport'),
 
 Middleware.requireUser = function(req, res, next) {
 	var writeApi = require.main.require('nodebb-plugin-write-api');
+	var routeMatch;
 
 	if (req.headers.hasOwnProperty('authorization')) {
 		passport.authenticate('bearer', { session: false }, function(err, user) {
@@ -71,6 +72,22 @@ Middleware.requireUser = function(req, res, next) {
 
 					req.uid = decoded._uid
 					req.body = decoded;
+					next();
+				});
+			} else {
+				errorHandler.respond(401, res);
+			}
+		});
+	} else if ((routeMatch = req.originalUrl.match(/^\/api\/v\d+\/users\/(\d+)\/tokens$/)) && req.body.hasOwnProperty('password')) {
+		// If token generation route is hit, check password instead
+		var uid = routeMatch[1];
+
+		user.isPasswordCorrect(uid, req.body.password, function (err, ok) {
+			if (ok) {
+				req.login({ uid: parseInt(uid, 10) }, function(err) {
+					if (err) { return errorHandler.respond(500, res); }
+
+					req.uid = user.uid;
 					next();
 				});
 			} else {
