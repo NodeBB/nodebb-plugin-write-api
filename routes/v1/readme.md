@@ -46,8 +46,9 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: No parameters
         * `POST /:uid/tokens`
             * Creates a new user token for the passed in uid
-            * **Accepts**: No parameters
+            * **Accepts**: No parameters normally, will accept `password` in lieu of Bearer token
             * Must be called with an active token for that user
+            * This is the only route that will allow you to pass in `password` in the request body. Generate a new token and then use the token in subsequent calls.
         * `DELETE /:uid/tokens/:token`
             * Revokes an active user token
             * **Accepts**: No parameters
