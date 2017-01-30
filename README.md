@@ -68,6 +68,16 @@ When the API encounters an error, it will do it's best to report what went wrong
 
 # Changelog
 
+## v4.6
+
+* Bug fixes
+* Allowing users to generate token via password input (only in token generation route)
+
+## v4.5
+
+* Bug fixes
+* Updated integration with NodeBB so that privileged assets in NodeBB (e.g. `/unread`) can be retrieved for a user via user/master tokens
+
 ## v4.2
 
 * Fix bug with topic deletion
