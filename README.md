@@ -42,7 +42,7 @@ There are two types of tokens:
   * A *master token* is not associated with any specific uid, though a `_uid` parameter is required in the request, and then all calls are made in the name of *that* user.
     This is the only difference between the two tokens. A master token with `_uid` set to a non-administrator will not allow you to make administrative calls.
 
-*Note*: The first token must be generated via the administration page (`admin/plugins/write-api`), but additional *user* tokens can be generated using an existing user/master token.
+*Note*: The first token can be generated via the administration page (`admin/plugins/write-api`), or via the token generation route (`POST /api/v1/users/{UID}/tokens`) by sending in a password, but additional *user* tokens can be generated using an existing user/master token.
 
 ## JSON Web Tokens
 
