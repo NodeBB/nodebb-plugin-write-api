@@ -56,6 +56,10 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.handle(err, res);
 			});
 		});
-
+		var multipart = require.main.require('connect-multiparty');
+		app.route('/:cid/upload').post(apiMiddleware.requireUser, apiMiddleware.validateCid, multipart(), function(req, res, next){
+			req.body.cid = req.params.cid;
+			require.main.require('./src/controllers/uploads').uploadPost(req, res, next);
+		});
 	return app;
 };
