@@ -69,6 +69,9 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:cid/state`
             * Disables a category
             * **Accepts**: No parameters
+        * `POST /:cid/upload`
+            * Uploads a File
+            * **Accepts**: A multipart files array `files[]`
     * `/groups`
         * `POST /`
             * Creates a new group
