@@ -21,6 +21,7 @@ module.exports = function(app, coreMiddleware) {
 	app.use('/posts', require('./posts')(coreMiddleware));
 	app.use('/topics', require('./topics')(coreMiddleware));
 	app.use('/categories', require('./categories')(coreMiddleware));
+	app.use('/util', require('./util')(coreMiddleware));
 
 	app.get('/ping', function(req, res) {
 		res.status(200).json({
