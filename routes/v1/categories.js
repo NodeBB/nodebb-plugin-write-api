@@ -56,6 +56,5 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.handle(err, res);
 			});
 		});
-
 	return app;
 };

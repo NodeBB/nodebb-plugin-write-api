@@ -120,3 +120,7 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:pid`
             * Deletes a post (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
+    * `/util`
+      * `POST /upload`
+      * Uploads a File
+      * **Accepts**: A multipart files array `files[]`
