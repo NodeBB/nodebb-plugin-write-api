@@ -120,6 +120,10 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:pid`
             * Deletes a post (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
+        * `PUT /:pid/vote`
+            * Votes for a post
+            * **Requires**: `type`
+            * `type` must be either `upvote`, `downvote` or `unvote`.
     * `/util`
       * `POST /upload`
       * Uploads a File
