@@ -38,7 +38,40 @@ module.exports = function(middleware) {
 			});
 		});
 
-		
+	app.route('/:pid/vote')
+		.put(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['type'], req, res)) {
+        return false;
+      }
+			if (!req.body.type.match(/^(upvote|downvote|unvote)$/)) {
+				res.status(400).json(errorHandler.generate(
+					400, 'invalid-params',
+					'Required parameters were used incorrectly in this API call, please see the "params" property',
+					['type']
+				));
+				return false;
+			}
+
+			var payload = {
+				uid: req.user.uid,
+				pid: req.params.pid,
+				type: req.body.type
+			}
+
+			if (req.body.type === 'upvote') {
+				posts.upvote(payload.pid, payload.uid, function(err, data) {
+					errorHandler.handle(err, res, data);
+				})
+			} else if (req.body.type === 'downvote'){
+				posts.downvote(payload.pid, payload.uid, function(err, data) {
+					errorHandler.handle(err, res, data);
+				})
+			} else {
+				posts.unvote(payload.pid, payload.uid, function(err, data) {
+					errorHandler.handle(err, res, data);
+				})
+			}
+		})
 
 	return app;
 };
