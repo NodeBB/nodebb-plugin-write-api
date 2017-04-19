@@ -41,8 +41,8 @@ module.exports = function(middleware) {
 	app.route('/:pid/vote')
 		.put(apiMiddleware.requireUser, function(req, res) {
 			if (!utils.checkRequired(['type'], req, res)) {
-        return false;
-      }
+				return false;
+			}
 			if (!req.body.type.match(/^(upvote|downvote|unvote)$/)) {
 				res.status(400).json(errorHandler.generate(
 					400, 'invalid-params',
