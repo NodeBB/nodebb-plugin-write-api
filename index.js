@@ -15,6 +15,7 @@ API.init = function(data, callback) {
 	// API Versions
 	var routes = require('./routes')(data.middleware);
 	data.router.use('/api/v1', routes.v1);
+	data.router.use('/api/v2', routes.v2);
 
 	// Set up HTTP bearer authentication via Passport
 	passport.use(new BearerStrategy({}, function(token, done) {

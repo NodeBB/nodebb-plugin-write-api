@@ -24,6 +24,7 @@ $ npm i
 # API Resources
 
 * [`api/v1` Endpoints](routes/v1/readme.md)
+* [`api/v2` Endpoints](routes/v2/readme.md)
 
 # Quick Start
 
@@ -67,6 +68,11 @@ When the API encounters an error, it will do it's best to report what went wrong
     }
 
 # Changelog
+
+## v5.0
+
+* Introduced v2 router with breaking changes to some routes (see [`api/v2` Endpoints](routes/v2/readme.md) for more information)
+* Additional validation for post routes in v2 router only
 
 ## v4.6
 
