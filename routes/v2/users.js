@@ -88,20 +88,32 @@ module.exports = function(/*middleware*/) {
 
 			var timestamp = parseInt(req.body.timestamp, 10) || Date.now();
 
+			function addMessage(roomId) {
+				Messaging.addMessage(req.user.uid, roomId, req.body.message, timestamp, function(err, message) {
+					if (parseInt(req.body.quiet, 10) !== 1) {
+						Messaging.notifyUsersInRoom(req.user.uid, roomId, message);
+					}
+
+					return errorHandler.handle(err, res, message);
+				});
+			}
+
 			Messaging.canMessageUser(req.user.uid, req.params.uid, function(err) {
 				if (err) {
 					return errorHandler.handle(err, res);
 				}
 
-				Messaging.newRoom(req.user.uid, [req.params.uid], function(err, roomId) {
-					Messaging.addMessage(req.user.uid, roomId, req.body.message, timestamp, function(err, message) {
-						if (parseInt(req.body.quiet, 10) !== 1 && !timestamp) {
-							Messaging.notifyUsersInRoom(req.user.uid, roomId, message);
+				if (req.body.roomId) {
+					addMessage(req.body.roomId);
+				} else {
+					Messaging.newRoom(req.user.uid, [req.params.uid], function(err, roomId) {
+						if (err) {
+							return errorHandler.handle(err, res);
 						}
 
-						return errorHandler.handle(err, res, message);
+						addMessage(roomId);
 					});
-				});
+				}
 			});
 		});
 
