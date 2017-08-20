@@ -39,15 +39,15 @@ module.exports = function(middleware) {
 		});
 
 	app.route('/:pid/vote')
-		.put(apiMiddleware.requireUser, function(req, res) {
-			if (!utils.checkRequired(['type'], req, res)) {
+		.post(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['delta'], req, res)) {
 				return false;
 			}
-			if (!req.body.type.match(/^(upvote|downvote|unvote)$/)) {
+			if (typeof req.body.delta !== 'number') {
 				res.status(400).json(errorHandler.generate(
 					400, 'invalid-params',
 					'Required parameters were used incorrectly in this API call, please see the "params" property',
-					['type']
+					['delta']
 				));
 				return false;
 			}
@@ -55,23 +55,29 @@ module.exports = function(middleware) {
 			var payload = {
 				uid: req.user.uid,
 				pid: req.params.pid,
-				type: req.body.type
+				delta: req.body.delta
 			}
 
-			if (req.body.type === 'upvote') {
+			if (req.body.delta > 0) {
 				posts.upvote(payload.pid, payload.uid, function(err, data) {
 					errorHandler.handle(err, res, data);
 				})
-			} else if (req.body.type === 'downvote'){
-				posts.downvote(payload.pid, payload.uid, function(err, data) {
-					errorHandler.handle(err, res, data);
-				})
 			} else {
-				posts.unvote(payload.pid, payload.uid, function(err, data) {
+				posts.downvote(payload.pid, payload.uid, function(err, data) {
 					errorHandler.handle(err, res, data);
 				})
 			}
 		})
+		.delete(apiMiddleware.requireUser, function(req, res) {
+			var payload = {
+				uid: req.user.uid,
+				pid: req.params.pid
+			}
+
+			posts.unvote(payload.pid, payload.uid, function(err, data) {
+				errorHandler.handle(err, res, data);
+			})
+		});
 
 	return app;
 };
