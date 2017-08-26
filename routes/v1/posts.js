@@ -43,38 +43,23 @@ module.exports = function(middleware) {
 			if (!utils.checkRequired(['delta'], req, res)) {
 				return false;
 			}
-			if (typeof req.body.delta !== 'number') {
-				res.status(400).json(errorHandler.generate(
-					400, 'invalid-params',
-					'Required parameters were used incorrectly in this API call, please see the "params" property',
-					['delta']
-				));
-				return false;
-			}
-
-			var payload = {
-				uid: req.user.uid,
-				pid: req.params.pid,
-				delta: req.body.delta
-			}
 
 			if (req.body.delta > 0) {
-				posts.upvote(payload.pid, payload.uid, function(err, data) {
+				posts.upvote(req.params.pid, req.user.uid, function(err, data) {
+					errorHandler.handle(err, res, data);
+				})
+			} else if (req.body.delta < 0) {
+				posts.downvote(req.params.pid, req.user.uid, function(err, data) {
 					errorHandler.handle(err, res, data);
 				})
 			} else {
-				posts.downvote(payload.pid, payload.uid, function(err, data) {
+				posts.unvote(req.params.pid, req.user.uid, function(err, data) {
 					errorHandler.handle(err, res, data);
-				})
+				})	
 			}
 		})
 		.delete(apiMiddleware.requireUser, function(req, res) {
-			var payload = {
-				uid: req.user.uid,
-				pid: req.params.pid
-			}
-
-			posts.unvote(payload.pid, payload.uid, function(err, data) {
+			posts.unvote(req.params.pid, req.user.uid, function(err, data) {
 				errorHandler.handle(err, res, data);
 			})
 		});
