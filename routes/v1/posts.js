@@ -38,7 +38,31 @@ module.exports = function(middleware) {
 			});
 		});
 
-		
+	app.route('/:pid/vote')
+		.post(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['delta'], req, res)) {
+				return false;
+			}
+
+			if (req.body.delta > 0) {
+				posts.upvote(req.params.pid, req.user.uid, function(err, data) {
+					errorHandler.handle(err, res, data);
+				})
+			} else if (req.body.delta < 0) {
+				posts.downvote(req.params.pid, req.user.uid, function(err, data) {
+					errorHandler.handle(err, res, data);
+				})
+			} else {
+				posts.unvote(req.params.pid, req.user.uid, function(err, data) {
+					errorHandler.handle(err, res, data);
+				})	
+			}
+		})
+		.delete(apiMiddleware.requireUser, function(req, res) {
+			posts.unvote(req.params.pid, req.user.uid, function(err, data) {
+				errorHandler.handle(err, res, data);
+			})
+		});
 
 	return app;
 };

@@ -134,6 +134,13 @@ an administrative uid. All other uids passed in will result in an error.
         * `PUT /:pid/state`
             * Restores a post
             * **Accepts**: No parameters
+        * `POST /:pid/vote`
+            * Votes for a post
+            * **Requires**: `delta`
+            * `delta` must be a number. If `delta > 0`, it's considered an upvote; if `delta < 0`, it's considered a downvote; otherwise, it's an unvote.
+        * `DELETE /:pid/vote`
+            * Unvotes a post
+            * **Accepts**: No parameters
     * `/util`
       * `POST /upload`
       * Uploads a File
