@@ -29,21 +29,33 @@ $ npm i
 # Quick Start
 
 1. Install and activate the plugin, reload NodeBB
-1. Generate your uid an API token in the ACP page
-1. `curl -H "Authorization: Bearer {YOUR_TOKEN}" --data "title={TITLE}&content={CONTENT}&cid={CID}" http://localhost:4567/api/v1/topics`
+1. Generate your uid an API token
+
+1. `curl -H "Authorization: bearer {YOUR_TOKEN}" --data "title={TITLE}&content={CONTENT}&cid={CID}" http://localhost:4567/api/v1/topics`
 
 # Authentication
 
-Authentication is handled either via HTTP Bearer Token or JSON Web Token, as generated/specified in the Write API.
+Authentication is handled either via HTTP bearer Token or JSON Web Token, as generated/specified in the Write API.
 
-## Bearer Tokens
+## Tokens
 
-There are two types of tokens:
-  * A *user token* is associated with a specific uid, and all calls made are made in the name of that user
-  * A *master token* is not associated with any specific uid, though a `_uid` parameter is required in the request, and then all calls are made in the name of *that* user.
-    This is the only difference between the two tokens. A master token with `_uid` set to a non-administrator will not allow you to make administrative calls.
+There are two types of tokens the **bearer/master token** and the **user token**. Think of these tokens as keys to two locks. The first token the bearer/master token is the key to the lock on the gate of your front yard. Its gets you onto the property but you can't get into your house with it, but you can get into the garage and walk around the house. So it has a certain level of rights to it.  In some cases you wont need the user token when using the bearer/master token. 
+The second token the user token is the key to your front door. It can get you into the house, but it can't get you on the property. So if you will always need the bearer/master token when using the user token. 
 
-*Note*: The first token can be generated via the administration page (`admin/plugins/write-api`), or via the token generation route (`POST /api/v1/users/{UID}/tokens`) by sending in a password, but additional *user* tokens can be generated using an existing user/master token.
+
+
+### bearer/master token
+   This token grants you access to the API. To get a bearer/mater token. Go the admin section of the site select plugins > write-api > create token button under master tokens. <br>
+   You then add this token your headers<br> 
+   key = **authorization** and **value** = 'bearer {your bearer/master token}'
+   <br>
+  
+### user token
+     Is associated with a specific uid. You need a user token to make calls that requrie a userID to be associated the enity creation. This is 95% of the rest of the api.  To get a user token admin section of the site select plugins > write-api > in the active tokens section input a UID and then push create token button . <br>
+     You append the user token as a paramater to the querty string <br>
+     http://localhost:4567/api/v2/topics/?_uid=1
+   
+    addtionally you can create a user token via API route (`POST /api/v1/users/{UID}/tokens`) using just the bearer/master token.
 
 ## JSON Web Tokens
 
