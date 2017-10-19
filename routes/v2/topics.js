@@ -17,14 +17,10 @@ module.exports = function(middleware) {
 				return false;
 			}
 
-			var payload = {
-					cid: req.body.cid,
-					title: req.body.title,
-					content: req.body.content,
-					tags: req.body.tags || [],
-					uid: req.user.uid,
-					timestamp: req.body.timestamp
-				};
+			var payload = Object.assign({}, req.body);
+			payload.tags = payload.tags || []
+			payload.uid = payload.user.uid
+			delete payload.user
 
 			Topics.post(payload, function(err, data) {
 				return errorHandler.handle(err, res, data);
