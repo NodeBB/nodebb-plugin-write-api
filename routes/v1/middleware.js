@@ -16,6 +16,10 @@ Middleware.requireUser = function(req, res, next) {
 	var writeApi = require.main.require('nodebb-plugin-write-api');
 	var routeMatch;
 
+	if (!req.url.startsWith('/api')){
+		return next();
+	};
+
 	if (req.headers.hasOwnProperty('authorization')) {
 		passport.authenticate('bearer', { session: false }, function(err, user) {
 			if (err) { return next(err); }

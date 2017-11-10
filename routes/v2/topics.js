@@ -19,8 +19,7 @@ module.exports = function(middleware) {
 
 			var payload = Object.assign({}, req.body);
 			payload.tags = payload.tags || []
-			payload.uid = payload.user.uid
-			delete payload.user
+			payload.uid = req.user.uid
 
 			Topics.post(payload, function(err, data) {
 				return errorHandler.handle(err, res, data);
