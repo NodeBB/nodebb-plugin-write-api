@@ -165,12 +165,11 @@ module.exports = function(/*middleware*/) {
 
   app.route('/:uid/language')
     .put(apiMiddleware.requireUser, function(req, res) {
-      if (parseInt(req.params.uid, 10) !== parseInt(req.user.uid)) {
+      if (parseInt(req.body._uid, 10) !== parseInt(req.user.uid)) {
         return errorHandler.respond(401, res);
       }
-
       Users.setSetting(req.user.uid, 'userLang', req.body.userLang, function(err) {
-        errorHandler.handle(err, res);
+        return errorHandler.handle(err, res);
       });
     });
 
