@@ -85,6 +85,12 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:cid/state`
             * Disables a category
             * **Accepts**: No parameters
+        * `PUT /:cid/privileges`
+            * Adds group privileges to a category
+            * **Requires**: `privileges (array)`, `groups (array)`
+        * `DELETE /:cid/privileges`
+            * Deletes group privileges from a category
+            * **Requires**: `privileges (array)`, `groups (array)`
     * `/topics`
         * `POST /`
             * Creates a new topic
