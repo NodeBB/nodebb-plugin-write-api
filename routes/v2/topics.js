@@ -60,6 +60,7 @@ module.exports = function(middleware) {
 				uid: req.user.uid,
 				pid: req.body.pid,
 				content: req.body.content,
+				req: req, // so plugins can access and pass custom data
 				options: {}
 			};
 			console.log(payload);
