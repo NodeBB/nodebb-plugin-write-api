@@ -63,7 +63,6 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.handle(err, res);
 			});
 		})
-		
 		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
 			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'leave', function(err) {
 				return errorHandler.handle(err, res);
