@@ -50,7 +50,7 @@ module.exports = function(middleware) {
 			});
 		});
 		
-		app.route('/:pid/vote')
+	app.route('/:pid/vote')
 		.post(apiMiddleware.requireUser, function(req, res) {
 			if (!utils.checkRequired(['delta'], req, res)) {
 				return false;
@@ -75,6 +75,18 @@ module.exports = function(middleware) {
 				errorHandler.handle(err, res, data);
 			})
 		});
+
+	app.route('/:pid/bookmark')
+	    .post(apiMiddleware.requireUser, function (req, res) {
+	      posts.bookmark(req.params.pid, req.user.uid, function (err) {
+	        errorHandler.handle(err, res);
+	      });
+	    })
+	    .delete(apiMiddleware.requireUser, function (req, res) {
+	      posts.unbookmark(req.params.pid, req.user.uid, function (err) {
+	        errorHandler.handle(err, res);
+	      });
+	    });
 
 	return app;
 };
