@@ -2,10 +2,50 @@
 /* globals module, require */
 
 var posts = require.main.require('./src/posts'),
-  socketPosts = require.main.require('./src/socket.io/SocketPosts'),
+  topics = require.main.require('./src/topics'),
+  utils = require.main.require('./src/utils'),
+  privileges = require.main.require('./src/privileges'),
+  // socketPosts = require.main.require('./src/socket.io/SocketPosts'),
   apiMiddleware = require('./middleware'),
   errorHandler = require('../../lib/errorHandler'),
   utils = require('./utils');
+
+var async = require('async');
+
+function getReplies(uid, pid, callback) {
+  if (!(!isNaN(parseFloat(pid)) && isFinite(pid))) {
+    return callback(new Error('[[error:invalid-data]]'));
+  }
+  var postPrivileges;
+  async.waterfall([
+    function (next) {
+      posts.getPidsFromSet('pid:' + pid + ':replies', 0, -1, false, next);
+    },
+    function (pids, next) {
+      async.parallel({
+        posts: function (next) {
+          posts.getPostsByPids(pids, uid, next);
+        },
+        privileges: function (next) {
+          privileges.posts.get(pids, uid, next);
+        },
+      }, next);
+    },
+    function (results, next) {
+      postPrivileges = results.privileges;
+      results.posts = results.posts.filter(function (postData, index) {
+        return postData && postPrivileges[index].read;
+      });
+      topics.addPostData(results.posts, uid, next);
+    },
+    function (postData, next) {
+      postData.forEach(function (postData) {
+        posts.modifyPostByPrivilege(postData, postPrivileges.isAdminOrMod);
+      });
+      next(null, postData);
+    },
+  ], callback);
+};
 
 
 module.exports = function (middleware) {
@@ -99,8 +139,8 @@ module.exports = function (middleware) {
 
   app.route('/:pid/replies')
     .post(apiMiddleware.requireUser, function (req, res) {
-      socketPosts.getReplies({uid: req.user.uid}, req.params.pid, function (err) {
-        errorHandler.handle(err, res);
+      getReplies(req.user.uid, req.params.pid, function (err, data) {
+        errorHandler.handle(err, res, data);
       });
     });
 
