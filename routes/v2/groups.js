@@ -47,11 +47,7 @@ module.exports = function(middleware) {
 		}
 	});
 
-	app.put('/:slug/membership/:uid', middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.exposeAdmin, function(req, res) {
-		if (!res.locals.isAdmin) {
-			return errorHandler.respond(401, res);
-		}
-	
+	app.put('/:slug/membership/:uid', middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
 		Groups.join(res.locals.groupName, req.params.uid, function(err) {
 			errorHandler.handle(err, res);
 		});
