@@ -65,5 +65,17 @@ module.exports = function(middleware) {
 		});
 	});
 
+    app.delete('/:slug/membership/:uid', middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
+        Groups.isMember(req.params.uid, res.locals.groupName, function(err, isMember) {
+            if (isMember) {
+                Groups.leave(res.locals.groupName, req.params.uid, function(err) {
+                    errorHandler.handle(err, res);
+                });
+            } else {
+                errorHandler.respond(400, res);
+            }
+        });
+    });
+
 	return app;
 };
