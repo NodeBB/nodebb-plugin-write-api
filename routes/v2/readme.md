@@ -65,8 +65,14 @@ an administrative uid. All other uids passed in will result in an error.
         * `PUT /:slug/membership`
             * Joins a group (or requests membership if it is a private group)
             * **Accepts**: No parameters
+        * `PUT /:slug/membership/:uid`
+            * Adds a user to a group (The calling user has to be an administrator)
+            * **Accepts**: No parameters
         * `DELETE /:slug/membership`
             * Leaves a group
+            * **Accepts**: No parameters
+        * `DELETE /:slug/membership/:uid`
+            * Removes a user from a group (The calling user has to be an administrator)
             * **Accepts**: No parameters
     * `/categories`
         * `POST /`
