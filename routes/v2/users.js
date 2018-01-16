@@ -31,7 +31,10 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.respond(401, res);
 			}
 
-			Users.updateProfile(req.params.uid, req.body, function(err) {
+			// `uid` in `updateProfile` refers to calling user, not target user
+			req.body.uid = req.params.uid;
+
+			Users.updateProfile(req.user.uid, req.body, function(err) {
 				return errorHandler.handle(err, res);
 			});
 		})
