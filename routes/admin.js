@@ -29,7 +29,7 @@
 					});
 				},
 				documentation: function(next) {
-					fs.readFile(path.join(__dirname, 'v1/readme.md'), {
+					fs.readFile(path.join(__dirname, 'v2/readme.md'), {
 						encoding: 'utf-8'
 					}, function(err, markdown) {
 						plugins.fireHook('filter:parse.raw', markdown, next);
