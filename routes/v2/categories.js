@@ -1,10 +1,12 @@
 'use strict';
 /* globals module, require */
 
-var Categories = require.main.require('./src/categories'),
-	apiMiddleware = require('./middleware'),
-	errorHandler = require('../../lib/errorHandler'),
-	utils = require('./utils');
+var async = require('async');
+
+var Categories = require.main.require('./src/categories');
+var apiMiddleware = require('./middleware');
+var errorHandler = require('../../lib/errorHandler');
+var utils = require('./utils');
 
 
 module.exports = function(/*middleware*/) {
@@ -56,7 +58,7 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.handle(err, res);
 			});
 		});
-	
+
 	app.route('/:cid/privileges')
 		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
 			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'join', function(err) {
@@ -68,7 +70,7 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.handle(err, res);
 			});
 		});
-	
+
 	function changeGroupMembership(cid, privileges, groups, action, callback) {
 		async.each(groups, function(group, groupCb) {
 			async.each(privileges, function(privilege, privilegeCb) {
@@ -76,6 +78,6 @@ module.exports = function(/*middleware*/) {
 			}, groupCb);
 		}, callback);
 	}
-	
+
 	return app;
 };
