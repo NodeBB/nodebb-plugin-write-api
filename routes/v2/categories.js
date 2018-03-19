@@ -4,6 +4,7 @@
 var async = require('async');
 
 var Categories = require.main.require('./src/categories');
+var Groups = require.main.require('./src/groups');
 var apiMiddleware = require('./middleware');
 var errorHandler = require('../../lib/errorHandler');
 var utils = require('./utils');
