@@ -81,7 +81,7 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: `description`, `bgColor`, `color`, `parentCid`, `class`
         * `PUT /:cid`
             * Updates a category's data
-            * **Accepts**: `name`, `description`, `bgColor`, `color`, `parentCid`
+            * **Accepts**: `name`, `description`, `bgColor`, `color`, `parentCid`, `backgroundImage`
         * `DELETE /:cid`
             * Purges a category, including all topics and posts inside of it (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
