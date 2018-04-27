@@ -75,7 +75,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">Master Tokens</div>
 			<div class="panel-body">
-				<table class="table table-striped">
+				<table class="table table-striped master-tokens">
 					<tr>
 						<th>Token</th>
 					</tr>
