@@ -24,12 +24,12 @@ module.exports = function(/*middleware*/) {
 	app.route('/maintenance')
 		.post(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function (req, res, next) {
 			meta.configs.set('maintenanceMode', 1, function (err) {
-				return errorHandler.handle(err, res);	
+				return errorHandler.handle(err, res);
 			})
 		})
 		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function (req, res, next) {
 			meta.configs.set('maintenanceMode', 0, function (err) {
-				return errorHandler.handle(err, res);	
+				return errorHandler.handle(err, res);
 			})
 		});
 
