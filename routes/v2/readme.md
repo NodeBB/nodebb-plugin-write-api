@@ -154,9 +154,15 @@ an administrative uid. All other uids passed in will result in an error.
             * Unvotes a post
             * **Accepts**: No parameters
     * `/util`
-      * `POST /upload`
-      * Uploads a File
-      * **Accepts**: A multipart files array `files[]`
+        * `POST /upload`
+            * Uploads a File
+            * **Accepts**: A multipart files array `files[]`
+        * `POST /maintenance`
+            * Enables Maintenance Mode
+            * **Accepts**: No parameters
+        * `DELETE /maintenance`
+            * Disabled Maintenance Mode
+            * **Accepts**: No parameters
 
 ## Changes from API v1
 
