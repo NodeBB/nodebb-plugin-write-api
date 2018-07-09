@@ -41,6 +41,9 @@ an administrative uid. All other uids passed in will result in an error.
             * `quiet` if set, will not notify the user that a chat message has been received (also useful during imports)
         * `PUT /:uid/ban`
             * Bans a user
+            * **Accepts**: `until`, `reason`
+            * `until` (unix timestamp in ms) Specifies expiration for the ban
+            * `reason` A string containing the reason for the ban
         * `DELETE /:uid/ban`
             * Unbans a user
         * `GET /:uid/tokens`

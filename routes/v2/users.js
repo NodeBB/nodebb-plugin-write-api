@@ -122,7 +122,7 @@ module.exports = function(/*middleware*/) {
 
 	app.route('/:uid/ban')
 		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
-			Users.ban(req.params.uid, function(err) {
+			Users.ban(req.params.uid, req.body.until || 0, req.body.reason || '', function(err) {
 				errorHandler.handle(err, res);
 			});
 		})
