@@ -6,10 +6,11 @@
 		fs = require('fs'),
 		path = require('path'),
 		db = module.parent.parent.require('./database'),
-		User = module.parent.parent.require('./user'),
-		plugins = module.parent.parent.require('./plugins'),
+		User = module.parent.parent.require('./user');
+	
+	var md = require('markdown-it')();
 
-		buildAdminPage = function(req, res) {
+	var buildAdminPage = function(req, res) {
 			async.parallel({
 				tokens: async.apply(db.getObject, 'writeToken:uid'),
 				masterTokens: async.apply(db.getSetMembers, 'masterTokens'),
@@ -32,7 +33,7 @@
 					fs.readFile(path.join(__dirname, 'v2/readme.md'), {
 						encoding: 'utf-8'
 					}, function(err, markdown) {
-						plugins.fireHook('filter:parse.raw', markdown, next);
+						next(err, !err ? md.render(markdown) : '');
 					});
 				}
 			}, function(err, data) {
