@@ -105,7 +105,7 @@ module.exports = function(middleware) {
 				return false;
 			}
 
-			Topics.updateTags(req.params.tid, req.body.tags, function(err) {
+			Topics.createTags(req.body.tags, req.params.tid, Date.now(), function(err) {
 				errorHandler.handle(err, res);
 			});
 		})
