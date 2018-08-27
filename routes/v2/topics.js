@@ -115,6 +115,18 @@ module.exports = function(middleware) {
 			});
 		});
 
+	app.route('/:tid/pin')
+		.put(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.tools.pin(req.params.tid, req.user.uid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.tools.unpin(req.params.tid, req.user.uid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		});
+
 	// **DEPRECATED** Do not use.
 	app.route('/follow')
 		.post(apiMiddleware.requireUser, function(req, res) {
