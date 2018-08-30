@@ -92,7 +92,12 @@ module.exports = function(/*middleware*/) {
 			var timestamp = parseInt(req.body.timestamp, 10) || Date.now();
 
 			function addMessage(roomId) {
-				Messaging.addMessage(req.user.uid, roomId, req.body.message, timestamp, function(err, message) {
+				Messaging.addMessage({
+					uid: req.user.uid,
+					roomId: roomId,
+					content: req.body.message,
+					timestamp: timestamp,
+				}, function(err, message) {
 					if (parseInt(req.body.quiet, 10) !== 1) {
 						Messaging.notifyUsersInRoom(req.user.uid, roomId, message);
 					}
