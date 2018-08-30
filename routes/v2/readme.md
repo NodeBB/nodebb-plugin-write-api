@@ -135,6 +135,12 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:tid/tags`
             * **Accepts**: No parameters
             * Clears the tag set associates with a topic
+        * `PUT /:tid/pin`
+            * **Accepts**: No parameters
+            * Pins a topic to the top of the category
+        * `DELETE /:tid/pin`
+            * **Accepts**: No parameters
+            * Unpins a topic from the top of the category
     * `/posts`
         * `PUT /:pid`
             * Edits a post by post ID
