@@ -44,10 +44,10 @@ API.addMenuItem = function(custom_header, callback) {
 };
 
 API.authenticate = function(data) {
-	require('./routes/v1/middleware').requireUser(data.req, data.res, data.next);
+	require('./routes/v2/middleware').requireUser(data.req, data.res, data.next);
 };
 
-API.associateUser = require('./routes/v1/middleware').associateUser;
+API.associateUser = require('./routes/v2/middleware').associateUser;
 
 API.reloadSettings = function(hash) {
 	if (!hash || hash === 'settings:writeapi') {

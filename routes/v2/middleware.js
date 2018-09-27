@@ -100,7 +100,8 @@ Middleware.requireUser = function(req, res, next) {
 			}
 		});
 	} else {
-		errorHandler.respond(401, res);
+		// No bearer token, jwt, or special handling instructions, transparently pass-through
+		next();
 	}
 };
 
