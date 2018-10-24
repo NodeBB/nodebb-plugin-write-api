@@ -5,8 +5,8 @@
 	var async = module.parent.parent.require('async'),
 		fs = require('fs'),
 		path = require('path'),
-		db = module.parent.parent.require('./database'),
-		User = module.parent.parent.require('./user');
+		db = require.main.require('./src/database'),
+		User = require.main.require('./src/user');
 	
 	var md = require('markdown-it')();
 
