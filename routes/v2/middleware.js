@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const async = require('async');
 
 const passport = require.main.require('passport');
+const nconf = require.main.require('nconf');
 
 const user = require.main.require('./src/user');
 const groups = require.main.require('./src/groups');
@@ -14,7 +15,11 @@ const categories = require.main.require('./src/categories');
 
 const errorHandler = require('../../lib/errorHandler');
 
-const Middleware = {};
+const Middleware = {
+	regexes: {
+		tokenRoute: new RegExp('^' + nconf.get('relative_path') + '\\/api\\/v\\d+\\/users\\/(\\d+)\\/tokens$'),
+	}
+};
 
 Middleware.requireUser = function(req, res, next) {
 	var writeApi = require.main.require('nodebb-plugin-write-api');
@@ -85,11 +90,11 @@ Middleware.requireUser = function(req, res, next) {
 				errorHandler.respond(401, res);
 			}
 		});
-	} else if ((routeMatch = req.originalUrl.match(/^\/api\/v\d+\/users\/(\d+)\/tokens$/)) && req.body.hasOwnProperty('password')) {
+	} else if ((routeMatch = req.originalUrl.match(Middleware.regexes.tokenRoute)) && req.body.hasOwnProperty('password')) {
 		// If token generation route is hit, check password instead
 		var uid = routeMatch[1];
 
-		user.isPasswordCorrect(uid, req.body.password, function (err, ok) {
+		user.isPasswordCorrect(uid, req.body.password, req.ip, function (err, ok) {
 			if (ok) {
 				req.login({ uid: parseInt(uid, 10) }, function(err) {
 					if (err) { return errorHandler.respond(500, res); }
