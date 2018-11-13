@@ -82,7 +82,7 @@ Middleware.requireUser = function(req, res, next) {
 				errorHandler.respond(401, res);
 			}
 		});
-	} else if ((routeMatch = req.originalUrl.match(/^\/api\/v\d+\/users\/(\d+)\/tokens$/)) && req.body.hasOwnProperty('password')) {
+	} else if ((routeMatch = req.originalUrl.match(/\/api\/v\d+\/users\/(\d+)\/tokens$/)) && req.body.hasOwnProperty('password')) {
 		// If token generation route is hit, check password instead
 		var uid = routeMatch[1];
 
