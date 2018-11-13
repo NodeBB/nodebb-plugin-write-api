@@ -14,6 +14,7 @@ const topics = require.main.require('./src/topics');
 const categories = require.main.require('./src/categories');
 
 const errorHandler = require('../../lib/errorHandler');
+const utils = require('./utils');
 
 const Middleware = {
 	regexes: {
@@ -90,8 +91,12 @@ Middleware.requireUser = function(req, res, next) {
 				errorHandler.respond(401, res);
 			}
 		});
-	} else if ((routeMatch = req.originalUrl.match(Middleware.regexes.tokenRoute)) && req.body.hasOwnProperty('password')) {
+	} else if ((routeMatch = req.originalUrl.match(Middleware.regexes.tokenRoute))) {
 		// If token generation route is hit, check password instead
+		if (!utils.checkRequired(['password'], req, res)) {
+			return false;
+		}
+
 		var uid = routeMatch[1];
 
 		user.isPasswordCorrect(uid, req.body.password, req.ip, function (err, ok) {
