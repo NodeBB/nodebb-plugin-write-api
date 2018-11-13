@@ -1,17 +1,20 @@
 'use strict';
 /* globals module, require */
 
-var passport = require.main.require('passport'),
-	async = require.main.require('async'),
-	jwt = require('jsonwebtoken'),
-	user = require.main.require('./src/user'),
-	groups = require.main.require('./src/groups'),
-	posts = require.main.require('./src/posts'),
-	topics = require.main.require('./src/topics'),
-	categories = require.main.require('./src/categories'),
-	errorHandler = require('../../lib/errorHandler'),
+const jwt = require('jsonwebtoken');
+const async = require('async');
 
-	Middleware = {};
+const passport = require.main.require('passport');
+
+const user = require.main.require('./src/user');
+const groups = require.main.require('./src/groups');
+const posts = require.main.require('./src/posts');
+const topics = require.main.require('./src/topics');
+const categories = require.main.require('./src/categories');
+
+const errorHandler = require('../../lib/errorHandler');
+
+const Middleware = {};
 
 Middleware.requireUser = function(req, res, next) {
 	var writeApi = require.main.require('nodebb-plugin-write-api');
