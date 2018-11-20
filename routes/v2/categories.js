@@ -73,6 +73,9 @@ module.exports = function(/*middleware*/) {
 		});
 
 	function changeGroupMembership(cid, privileges, groups, action, callback) {
+		privileges = Array.isArray(privileges) ? privileges : [privileges];
+		groups = Array.isArray(groups) ? groups : [groups];
+
 		async.each(groups, function(group, groupCb) {
 			async.each(privileges, function(privilege, privilegeCb) {
 				Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
