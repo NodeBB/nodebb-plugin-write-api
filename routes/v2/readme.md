@@ -24,7 +24,7 @@ an administrative uid. All other uids passed in will result in an error.
             * Can be called by either the target uid itself, or an administrative uid.
         * `PUT /:uid/password`
             * Changes a user's password
-            * **Requires**: `uid`, `new`
+            * **Requires**: `new`
             * **Accepts**: `current`
             * `current` is required if the calling user is not an administrator
         * `PUT /:uid/follow`
