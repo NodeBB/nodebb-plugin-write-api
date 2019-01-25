@@ -40,7 +40,7 @@ module.exports = function(middleware) {
 			var payload = {
 					tid: req.params.tid,
 					uid: req.user.uid,
-					req: utils.buildReqObject(req),	// For IP recording
+					req: req,	// For IP recording
 					content: req.body.content,
 					timestamp: req.body.timestamp
 				};
