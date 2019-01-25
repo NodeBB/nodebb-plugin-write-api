@@ -35,7 +35,7 @@ module.exports = function(middleware) {
 			var payload = {
 					tid: req.params.tid,
 					uid: req.user.uid,
-					req: req,	// For IP recording
+					req: utils.buildReqObject(req),	// For IP recording
 					content: req.body.content,
 					timestamp: req.body.timestamp
 				};
@@ -74,7 +74,7 @@ module.exports = function(middleware) {
 				errorHandler.handle(err, res, returnData);
 			});
 		});
-	
+
 	app.route('/:tid/state')
 		.put(apiMiddleware.requireUser, apiMiddleware.validateTid, function (req, res) {
 			Topics.restore(req.params.tid, req.params._uid, function (err) {
