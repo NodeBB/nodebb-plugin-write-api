@@ -8,7 +8,7 @@
 	"hooks": [
 		{ "hook": "static:app.load", "method": "init" },
 		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
-		{ "hook": "action:middleware.authenticate", "method": "authenticate"},
+		{ "hook": "response:middleware.authenticate", "method": "authenticate"},
 		{ "hook": "filter:router.page", "method": "associateUser" },
 		{ "hook": "action:settings.set", "method": "reloadSettings" }
 	],

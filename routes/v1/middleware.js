@@ -27,6 +27,7 @@ Middleware.requireUser = function(req, res, next) {
 					if (err) { return errorHandler.respond(500, res); }
 
 					req.uid = user.uid;
+					req.loggedIn = req.uid > 0;
 					next();
 				});
 			} else if (user.hasOwnProperty('master') && user.master === true) {
@@ -36,8 +37,8 @@ Middleware.requireUser = function(req, res, next) {
 
 					req.login(user, function(err) {
 						if (err) { return errorHandler.respond(500, res); }
-
 						req.uid = user.uid;
+						req.loggedIn = req.uid > 0;
 						next();
 					});
 				} else {
@@ -70,7 +71,8 @@ Middleware.requireUser = function(req, res, next) {
 				}, function(err) {
 					if (err) { return errorHandler.respond(500, res); }
 
-					req.uid = decoded._uid
+					req.uid = decoded._uid;
+					req.loggedIn = req.uid > 0;
 					req.body = decoded;
 					next();
 				});
@@ -88,6 +90,7 @@ Middleware.requireUser = function(req, res, next) {
 					if (err) { return errorHandler.respond(500, res); }
 
 					req.uid = user.uid;
+					req.loggedIn = req.uid > 0;
 					next();
 				});
 			} else {
@@ -110,6 +113,7 @@ Middleware.associateUser = function(req, res, next) {
 					if (err) { return errorHandler.respond(500, res); }
 
 					req.uid = user.uid;
+					req.loggedIn = req.uid > 0;
 					next();
 				});
 			} else if (user.hasOwnProperty('master') && user.master === true) {
@@ -121,6 +125,7 @@ Middleware.associateUser = function(req, res, next) {
 						if (err) { return errorHandler.respond(500, res); }
 
 						req.uid = user.uid;
+						req.loggedIn = req.uid > 0;
 						next();
 					});
 				} else {

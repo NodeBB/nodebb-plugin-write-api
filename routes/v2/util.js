@@ -2,6 +2,7 @@
 /* global module, require */
 
 var apiMiddleware = require('./middleware');
+var errorHandler = require('../../lib/errorHandler');
 
 var multipart = require.main.require('connect-multiparty');
 var uploadController = require.main.require('./src/controllers/uploads');
@@ -19,6 +20,18 @@ module.exports = function(/*middleware*/) {
 			uploadController.uploadFile(req.user.uid, uploadedFile, callback);
 		}, next);
 	});
+
+	app.route('/maintenance')
+		.post(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function (req, res, next) {
+			meta.configs.set('maintenanceMode', 1, function (err) {
+				return errorHandler.handle(err, res);
+			})
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function (req, res, next) {
+			meta.configs.set('maintenanceMode', 0, function (err) {
+				return errorHandler.handle(err, res);
+			})
+		});
 
 	return app;
 };

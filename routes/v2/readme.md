@@ -10,7 +10,7 @@ an administrative uid. All other uids passed in will result in an error.
     * `/users`
         * `POST /`
             * Creates a new user
-            * **Requires**: `username`
+            * **Requires**: `username` (In case it's taken, nodebb will append a number.)
             * **Accepts**: `password`, `email`
             * Any other data passed in will be saved into the user hash
         * `PUT /:uid`
@@ -24,7 +24,7 @@ an administrative uid. All other uids passed in will result in an error.
             * Can be called by either the target uid itself, or an administrative uid.
         * `PUT /:uid/password`
             * Changes a user's password
-            * **Requires**: `uid`, `new`
+            * **Requires**: `new`
             * **Accepts**: `current`
             * `current` is required if the calling user is not an administrator
         * `PUT /:uid/follow`
@@ -41,6 +41,9 @@ an administrative uid. All other uids passed in will result in an error.
             * `quiet` if set, will not notify the user that a chat message has been received (also useful during imports)
         * `PUT /:uid/ban`
             * Bans a user
+            * **Accepts**: `until`, `reason`
+            * `until` (unix timestamp in ms) Specifies expiration for the ban
+            * `reason` A string containing the reason for the ban
         * `DELETE /:uid/ban`
             * Unbans a user
         * `GET /:uid/tokens`
@@ -65,8 +68,14 @@ an administrative uid. All other uids passed in will result in an error.
         * `PUT /:slug/membership`
             * Joins a group (or requests membership if it is a private group)
             * **Accepts**: No parameters
+        * `PUT /:slug/membership/:uid`
+            * Adds a user to a group (The calling user has to be an administrator)
+            * **Accepts**: No parameters
         * `DELETE /:slug/membership`
             * Leaves a group
+            * **Accepts**: No parameters
+        * `DELETE /:slug/membership/:uid`
+            * Removes a user from a group (The calling user has to be an administrator)
             * **Accepts**: No parameters
     * `/categories`
         * `POST /`
@@ -75,7 +84,7 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: `description`, `bgColor`, `color`, `parentCid`, `class`
         * `PUT /:cid`
             * Updates a category's data
-            * **Accepts**: `name`, `description`, `bgColor`, `color`, `parentCid`
+            * **Accepts**: `name`, `description`, `bgColor`, `color`, `parentCid`, `backgroundImage`
         * `DELETE /:cid`
             * Purges a category, including all topics and posts inside of it (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters
@@ -85,6 +94,12 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:cid/state`
             * Disables a category
             * **Accepts**: No parameters
+        * `PUT /:cid/privileges`
+            * Adds group privileges to a category
+            * **Requires**: `privileges (array)`, `groups (array)`
+        * `DELETE /:cid/privileges`
+            * Deletes group privileges from a category
+            * **Requires**: `privileges (array)`, `groups (array)`
     * `/topics`
         * `POST /`
             * Creates a new topic
@@ -120,6 +135,12 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:tid/tags`
             * **Accepts**: No parameters
             * Clears the tag set associates with a topic
+        * `PUT /:tid/pin`
+            * **Accepts**: No parameters
+            * Pins a topic to the top of the category
+        * `DELETE /:tid/pin`
+            * **Accepts**: No parameters
+            * Unpins a topic from the top of the category
     * `/posts`
         * `PUT /:pid`
             * Edits a post by post ID
@@ -142,9 +163,15 @@ an administrative uid. All other uids passed in will result in an error.
             * Unvotes a post
             * **Accepts**: No parameters
     * `/util`
-      * `POST /upload`
-      * Uploads a File
-      * **Accepts**: A multipart files array `files[]`
+        * `POST /upload`
+            * Uploads a File
+            * **Accepts**: A multipart files array `files[]`
+        * `POST /maintenance`
+            * Enables Maintenance Mode
+            * **Accepts**: No parameters
+        * `DELETE /maintenance`
+            * Disabled Maintenance Mode
+            * **Accepts**: No parameters
 
 ## Changes from API v1
 

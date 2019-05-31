@@ -31,7 +31,10 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.respond(401, res);
 			}
 
-			Users.updateProfile(req.params.uid, req.body, function(err) {
+			// `uid` in `updateProfile` refers to calling user, not target user
+			req.body.uid = req.params.uid;
+
+			Users.updateProfile(req.user.uid, req.body, function(err) {
 				return errorHandler.handle(err, res);
 			});
 		})
@@ -89,7 +92,12 @@ module.exports = function(/*middleware*/) {
 			var timestamp = parseInt(req.body.timestamp, 10) || Date.now();
 
 			function addMessage(roomId) {
-				Messaging.addMessage(req.user.uid, roomId, req.body.message, timestamp, function(err, message) {
+				Messaging.addMessage({
+					uid: req.user.uid,
+					roomId: roomId,
+					content: req.body.message,
+					timestamp: timestamp,
+				}, function(err, message) {
 					if (parseInt(req.body.quiet, 10) !== 1) {
 						Messaging.notifyUsersInRoom(req.user.uid, roomId, message);
 					}
@@ -119,7 +127,7 @@ module.exports = function(/*middleware*/) {
 
 	app.route('/:uid/ban')
 		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, function(req, res) {
-			Users.ban(req.params.uid, function(err) {
+			Users.ban(req.params.uid, req.body.until || 0, req.body.reason || '', function(err) {
 				errorHandler.handle(err, res);
 			});
 		})

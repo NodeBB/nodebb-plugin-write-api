@@ -1,10 +1,13 @@
 'use strict';
 /* globals module, require */
 
-var Categories = require.main.require('./src/categories'),
-	apiMiddleware = require('./middleware'),
-	errorHandler = require('../../lib/errorHandler'),
-	utils = require('./utils');
+var async = require('async');
+
+var Categories = require.main.require('./src/categories');
+var Groups = require.main.require('./src/groups');
+var apiMiddleware = require('./middleware');
+var errorHandler = require('../../lib/errorHandler');
+var utils = require('./utils');
 
 
 module.exports = function(/*middleware*/) {
@@ -56,5 +59,29 @@ module.exports = function(/*middleware*/) {
 				return errorHandler.handle(err, res);
 			});
 		});
+
+	app.route('/:cid/privileges')
+		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'join', function(err) {
+				return errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'leave', function(err) {
+				return errorHandler.handle(err, res);
+			});
+		});
+
+	function changeGroupMembership(cid, privileges, groups, action, callback) {
+		privileges = Array.isArray(privileges) ? privileges : [privileges];
+		groups = Array.isArray(groups) ? groups : [groups];
+
+		async.each(groups, function(group, groupCb) {
+			async.each(privileges, function(privilege, privilegeCb) {
+				Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
+			}, groupCb);
+		}, callback);
+	}
+
 	return app;
 };

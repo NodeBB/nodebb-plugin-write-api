@@ -35,7 +35,7 @@ module.exports = function(middleware) {
 			var payload = {
 					tid: req.params.tid,
 					uid: req.user.uid,
-					req: req,	// For IP recording
+					req: utils.buildReqObject(req),	// For IP recording
 					content: req.body.content,
 					timestamp: req.body.timestamp
 				};
@@ -75,7 +75,7 @@ module.exports = function(middleware) {
 				errorHandler.handle(err, res, returnData);
 			});
 		});
-	
+
 	app.route('/:tid/state')
 		.put(apiMiddleware.requireUser, apiMiddleware.validateTid, function (req, res) {
 			Topics.restore(req.params.tid, req.params._uid, function (err) {
@@ -106,12 +106,24 @@ module.exports = function(middleware) {
 				return false;
 			}
 
-			Topics.updateTags(req.params.tid, req.body.tags, function(err) {
+			Topics.createTags(req.body.tags, req.params.tid, Date.now(), function(err) {
 				errorHandler.handle(err, res);
 			});
 		})
 		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
 			Topics.deleteTopicTags(req.params.tid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		});
+
+	app.route('/:tid/pin')
+		.put(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.tools.pin(req.params.tid, req.user.uid, function(err) {
+				errorHandler.handle(err, res);
+			});
+		})
+		.delete(apiMiddleware.requireUser, apiMiddleware.validateTid, function(req, res) {
+			Topics.tools.unpin(req.params.tid, req.user.uid, function(err) {
 				errorHandler.handle(err, res);
 			});
 		});

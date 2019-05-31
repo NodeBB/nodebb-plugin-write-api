@@ -9,6 +9,11 @@ define('admin/plugins/write-api', ['settings'], function(Settings) {
 		$('#newToken-create').on('click', Admin.createToken);
 		$('#masterToken-create').on('click', Admin.createMasterToken);
 		$('table').on('click', '[data-action="revoke"]', Admin.revokeToken);
+		$('.user-tokens input[readonly], .master-tokens input[readonly]').on('click', function () {
+			// Select entire input text
+			this.selectionStart = 0;
+			this.selectionEnd = this.value.length;
+		});
 	};
 
 	Admin.initSettings = function() {
