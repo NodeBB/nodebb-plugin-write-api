@@ -63,30 +63,50 @@ module.exports = function(/*middleware*/) {
 		});
 
 	app.route('/:cid/privileges')
-		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, async (req, res) => {
-			// Deprecate in v3
-			if (!req.body.ids && req.body.groups) {
-				winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
-				req.body.ids = req.body.groups;
-				delete req.body.groups;
-			}
-
+		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, async (req, res) => {
 			try {
+				utils.required(['privileges'], req);
+
+				const cidOk = await Categories.exists(req.params.cid);
+				if (!cidOk && parseInt(req.params.cid, 10) !== 0) {
+					return res.status(400).json(errorHandler.generate(
+						400, 'invalid-data',
+						'Invalid category ID received',
+					));
+				}
+
+				// Deprecate in v3
+				if (!req.body.ids && req.body.groups) {
+					winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
+					req.body.ids = req.body.groups;
+					delete req.body.groups;
+				}
+
 				await changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'join');
 				errorHandler.handle(null, res);
 			} catch (err) {
 				errorHandler.handle(err, res);
 			}
 		})
-		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, async (req, res) => {
-			// Deprecate in v3
-			if (!req.body.ids && req.body.groups) {
-				winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
-				req.body.ids = req.body.groups;
-				delete req.body.groups;
-			}
-
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, async (req, res) => {
 			try {
+				utils.required(['privileges'], req);
+
+				const cidOk = await Categories.exists(req.params.cid);
+				if (!cidOk && parseInt(req.params.cid, 10) !== 0) {
+					return res.status(400).json(errorHandler.generate(
+						400, 'invalid-data',
+						'Invalid category ID received',
+					));
+				}
+
+				// Deprecate in v3
+				if (!req.body.ids && req.body.groups) {
+					winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
+					req.body.ids = req.body.groups;
+					delete req.body.groups;
+				}
+
 				await changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'leave');
 				errorHandler.handle(null, res);
 			} catch (err) {

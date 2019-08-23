@@ -27,6 +27,24 @@ Utils.checkRequired = function(required, req, res) {
 	}
 };
 
+// variant of checkRequired that throws error instead of returning Boolean
+Utils.required = async (required, req) => {
+	var missing = [];
+	for(var x=0,numRequired=required.length;x<numRequired;x++) {
+		if (!req.body.hasOwnProperty(required[x])) {
+			missing.push(required[x]);
+		}
+	}
+
+	if (!missing.length) {
+		return;
+	}
+
+	const error = new Error('Required parameters were missing from this API call, please see the "params" property');
+	error.code = 'params-missing';
+	throw error;
+}
+
 Utils.buildReqObject = function (req) {
 	var headers = req.headers;
 	var encrypted = !!req.connection.encrypted;
