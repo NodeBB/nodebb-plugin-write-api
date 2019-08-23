@@ -63,38 +63,51 @@ module.exports = function(/*middleware*/) {
 		});
 
 	app.route('/:cid/privileges')
-		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, async (req, res) => {
 			// Deprecate in v3
 			if (!req.body.ids && req.body.groups) {
 				winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
 				req.body.ids = req.body.groups;
 				delete req.body.groups;
 			}
-			changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'join', function(err) {
-				return errorHandler.handle(err, res);
-			});
+
+			try {
+				await changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'join');
+				errorHandler.handle(null, res);
+			} catch (err) {
+				errorHandler.handle(err, res);
+			}
 		})
-		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, async (req, res) => {
 			// Deprecate in v3
 			if (!req.body.ids && req.body.groups) {
 				winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
 				req.body.ids = req.body.groups;
 				delete req.body.groups;
 			}
-			changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'leave', function(err) {
-				return errorHandler.handle(err, res);
-			});
+
+			try {
+				await changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'leave');
+				errorHandler.handle(null, res);
+			} catch (err) {
+				errorHandler.handle(err, res);
+			}
 		});
 
-	function changeGroupMembership(cid, privileges, ids, action, callback) {
+	async function changeGroupMembership(cid, privileges, ids, action) {
 		privileges = Array.isArray(privileges) ? privileges : [privileges];
 		ids = Array.isArray(ids) ? ids : [ids];
+		const tasks = [];
 
-		async.each(ids, function(id, groupCb) {
-			async.each(privileges, function(privilege, privilegeCb) {
-				Groups[action]('cid:' + cid + ':privileges:' + privilege, id, privilegeCb);
-			}, groupCb);
-		}, callback);
+		for(const x in ids) {
+			for(const y in privileges) {
+				const id = ids[x];
+				const privilege = privileges[y];
+				tasks.push(Groups[action]('cid:' + cid + ':privileges:' + privilege, id));
+			}
+		}
+
+		await Promise.all(tasks);
 	}
 
 	return app;
