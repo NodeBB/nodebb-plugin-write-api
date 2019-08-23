@@ -3,6 +3,8 @@
 
 var async = require('async');
 
+const winston = require.main.require('winston');
+
 var Categories = require.main.require('./src/categories');
 var Groups = require.main.require('./src/groups');
 var apiMiddleware = require('./middleware');
@@ -62,23 +64,35 @@ module.exports = function(/*middleware*/) {
 
 	app.route('/:cid/privileges')
 		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
-			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'join', function(err) {
+			// Deprecate in v3
+			if (!req.body.ids && req.body.groups) {
+				winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
+				req.body.ids = req.body.groups;
+				delete req.body.groups;
+			}
+			changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'join', function(err) {
 				return errorHandler.handle(err, res);
 			});
 		})
 		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCid, function(req, res) {
-			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'leave', function(err) {
+			// Deprecate in v3
+			if (!req.body.ids && req.body.groups) {
+				winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
+				req.body.ids = req.body.groups;
+				delete req.body.groups;
+			}
+			changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'leave', function(err) {
 				return errorHandler.handle(err, res);
 			});
 		});
 
-	function changeGroupMembership(cid, privileges, groups, action, callback) {
+	function changeGroupMembership(cid, privileges, ids, action, callback) {
 		privileges = Array.isArray(privileges) ? privileges : [privileges];
-		groups = Array.isArray(groups) ? groups : [groups];
+		ids = Array.isArray(ids) ? ids : [ids];
 
-		async.each(groups, function(group, groupCb) {
+		async.each(ids, function(id, groupCb) {
 			async.each(privileges, function(privilege, privilegeCb) {
-				Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
+				Groups[action]('cid:' + cid + ':privileges:' + privilege, id, privilegeCb);
 			}, groupCb);
 		}, callback);
 	}
