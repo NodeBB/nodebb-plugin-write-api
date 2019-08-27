@@ -96,13 +96,12 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: No parameters
         * `PUT /:cid/privileges`
             * Adds user or group privileges to a category
-            * If you are adding a user privilege, specify a uid or gid in the `ids` parameter
             * Group privileges are prefixed with `groups:`, i.e. `groups:topics:create`
-            * **Requires**: `privileges (array)`, `ids (array)`
+            * **Requires**: `privileges (array)`, `groups (array)`
         * `DELETE /:cid/privileges`
             * Deletes group privileges from a category
             * The same restrictions apply as with privilege adding
-            * **Requires**: `privileges (array)`, `ids (array)`
+            * **Requires**: `privileges (array)`, `groups (array)`
     * `/topics`
         * `POST /`
             * Creates a new topic

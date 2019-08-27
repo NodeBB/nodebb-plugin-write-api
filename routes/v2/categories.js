@@ -63,71 +63,26 @@ module.exports = function(/*middleware*/) {
 		});
 
 	app.route('/:cid/privileges')
-		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, async (req, res) => {
-			try {
-				utils.required(['privileges'], req);
-
-				const cidOk = await Categories.exists(req.params.cid);
-				if (!cidOk && parseInt(req.params.cid, 10) !== 0) {
-					return res.status(400).json(errorHandler.generate(
-						400, 'invalid-data',
-						'Invalid category ID received',
-					));
-				}
-
-				// Deprecate in v3
-				if (!req.body.ids && req.body.groups) {
-					winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
-					req.body.ids = req.body.groups;
-					delete req.body.groups;
-				}
-
-				await changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'join');
-				errorHandler.handle(null, res);
-			} catch (err) {
-				errorHandler.handle(err, res);
-			}
+		.put(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCidIncludingGlobal, function(req, res) {
+			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'join', function(err) {
+				return errorHandler.handle(err, res);
+			});
 		})
-		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, async (req, res) => {
-			try {
-				utils.required(['privileges'], req);
-
-				const cidOk = await Categories.exists(req.params.cid);
-				if (!cidOk && parseInt(req.params.cid, 10) !== 0) {
-					return res.status(400).json(errorHandler.generate(
-						400, 'invalid-data',
-						'Invalid category ID received',
-					));
-				}
-
-				// Deprecate in v3
-				if (!req.body.ids && req.body.groups) {
-					winston.warn('[plugins/write-api] `/:cid/privileges` endpoint uses `ids` now instead of `groups`, to be deprecated in v3');
-					req.body.ids = req.body.groups;
-					delete req.body.groups;
-				}
-
-				await changeGroupMembership(req.params.cid, req.body.privileges, req.body.ids, 'leave');
-				errorHandler.handle(null, res);
-			} catch (err) {
-				errorHandler.handle(err, res);
-			}
+		.delete(apiMiddleware.requireUser, apiMiddleware.requireAdmin, apiMiddleware.validateCidIncludingGlobal, function(req, res) {
+			changeGroupMembership(req.params.cid, req.body.privileges, req.body.groups, 'leave', function(err) {
+				return errorHandler.handle(err, res);
+			});
 		});
 
-	async function changeGroupMembership(cid, privileges, ids, action) {
+	function changeGroupMembership(cid, privileges, groups, action, callback) {
 		privileges = Array.isArray(privileges) ? privileges : [privileges];
-		ids = Array.isArray(ids) ? ids : [ids];
-		const tasks = [];
+		groups = Array.isArray(groups) ? groups : [groups];
 
-		for(const x in ids) {
-			for(const y in privileges) {
-				const id = ids[x];
-				const privilege = privileges[y];
-				tasks.push(Groups[action]('cid:' + cid + ':privileges:' + privilege, id));
-			}
-		}
-
-		await Promise.all(tasks);
+		async.each(groups, function(group, groupCb) {
+			async.each(privileges, function(privilege, privilegeCb) {
+				Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
+			}, groupCb);
+		}, callback);
 	}
 
 	return app;

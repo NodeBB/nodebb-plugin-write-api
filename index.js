@@ -11,9 +11,9 @@ var	passport = module.parent.require('passport'),
 
 	API = {};
 
-API.init = async (data) => {
+API.init = function (data, callback) {
 	// API Versions
-	var routes = await require('./routes')(data.middleware);
+	var routes = require('./routes')(data.middleware);
 	data.router.use('/api/v1', routes.v1);
 	data.router.use('/api/v2', routes.v2);
 
@@ -30,6 +30,7 @@ API.init = async (data) => {
 	sockets.init();	// WebSocket listeners
 
 	API.reloadSettings();
+	callback();
 };
 
 API.addMenuItem = function(custom_header, callback) {

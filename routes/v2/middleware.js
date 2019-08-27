@@ -249,6 +249,14 @@ Middleware.validateCid = function(req, res, next) {
 	}
 };
 
+Middleware.validateCidIncludingGlobal = function(req, res, next) {
+	if (req.params.cid && parseInt(req.params.cid, 10) === 0) {
+		return next();
+	}
+
+	Middleware.validateCid(req, res, next);
+};
+
 Middleware.validateGroup = function(req, res, next) {
 	if (res.locals.groupName) {
 		next();
