@@ -17,9 +17,9 @@ $ cd /path/to/nodebb/node_modules
 $ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
 $ cd nodebb-plugin-write-api
 $ npm i
-
-# Then start NodeBB and activate the plugin
 ```
+
+In both methods, you will need to `./nodebb build` before (re-)starting your NodeBB forum.
 
 # API Resources
 
