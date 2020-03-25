@@ -76,5 +76,17 @@ module.exports = function(middleware) {
 			})
 		});
 
+		app.route('/:pid/bookmark')
+    .post(apiMiddleware.requireUser, function(req, res) {
+      posts.bookmark(req.params.pid, req.user.uid, function (err) {
+        errorHandler.handle(err, res);
+      });
+    })
+    .delete(apiMiddleware.requireUser, apiMiddleware.validatePid, function (req, res) {
+      posts.unbookmark(req.params.pid, req.user.uid, function (err) {
+        errorHandler.handle(err, res);
+      });
+    });		
+
 	return app;
 };
