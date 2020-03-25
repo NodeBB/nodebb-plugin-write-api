@@ -164,6 +164,12 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:pid/vote`
             * Unvotes a post
             * **Accepts**: No parameters
+        * `POST /:pid/bookmark`
+            * Bookmarks a post
+            * **Accepts**: No parameters
+        * `DELETE /:pid/bookmark`
+            * Unbookmarks a post
+            * **Accepts**: No parameters
     * `/util`
         * `POST /upload`
             * Uploads a File
