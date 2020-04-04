@@ -77,6 +77,15 @@ an administrative uid. All other uids passed in will result in an error.
         * `DELETE /:slug/membership/:uid`
             * Removes a user from a group (The calling user has to be an administrator)
             * **Accepts**: No parameters
+        * `POST /:slug/invite/:uid`
+            * Invites a user to a group (The calling user must be a group owner)
+            * **Accepts**: No parameters
+        * `PUT /:slug/invite/`
+            * Accepts a pending group invitation (The calling user must be the invitation recipient)
+            * **Accepts**: No parameters
+        * `DELETE /:slug/invite/`
+            * Rejects a pending group invitation (The calling user must be the invitation recipient)
+            * **Accepts**: No parameters            
     * `/categories`
         * `POST /`
             * Creates a new category
