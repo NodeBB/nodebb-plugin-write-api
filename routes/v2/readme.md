@@ -85,6 +85,12 @@ an administrative uid. All other uids passed in will result in an error.
             * **Accepts**: No parameters
         * `DELETE /:slug/invite/`
             * Rejects a pending group invitation (The calling user must be the invitation recipient)
+            * **Accepts**: No parameters
+        * `POST /:slug/ownership/:uid`
+            * Makes a user a group owner (The calling user must be a group owner)
+            * **Accepts**: No parameters
+        * `DELETE /:slug/ownership/:uid`
+            * Recinds group ownership from a user (The calling user must be a group owner)
             * **Accepts**: No parameters            
     * `/categories`
         * `POST /`

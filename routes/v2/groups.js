@@ -114,5 +114,30 @@ module.exports = function(middleware) {
 		});
 	});
 
+	app.post('/:slug/ownership/:uid', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.requireGroupOwner, function(req, res) {
+		Users.exists(req.params.uid, function(err, exists) {
+			if (exists) {
+				Groups.ownership.grant(req.params.uid, res.locals.groupName, function(err) {
+					errorHandler.handle(err, res);
+				});
+			} else {
+				errorHandler.respond(400, res);
+			}
+		});
+	});
+
+	app.delete('/:slug/ownership/:uid', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.requireGroupOwner, function(req, res) {
+		Users.exists(req.params.uid, function(err, exists) {
+			if (exists) {
+				Groups.ownership.rescind(req.params.uid, res.locals.groupName, function(err) {
+					errorHandler.handle(err, res);
+				});
+			} else {
+				errorHandler.respond(400, res);
+			}
+		});
+	});
+
+
 	return app;
 };
