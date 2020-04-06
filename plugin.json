@@ -1,8 +1,8 @@
 {
-	"id": "nodebb-plugin-write-api",
+	"id": "nodebb-plugin-write-api-robyweb",
 	"name": "NodeBB Write-Enabled API",
 	"description": "A RESTful JSON-speaking API allowing you to write things to NodeBB",
-	"url": "https://github.com/julianlam/nodebb-plugin-write-api",
+	"url": "https://github.com/robyweb/nodebb-plugin-write-api",
 	"library": "./index.js",
 	"templates": "templates",
 	"hooks": [
