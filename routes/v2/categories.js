@@ -7,6 +7,7 @@ const winston = require.main.require('winston');
 
 var Categories = require.main.require('./src/categories');
 var Groups = require.main.require('./src/groups');
+var Privileges = require.main.require('./src/privileges');
 var apiMiddleware = require('./middleware');
 var errorHandler = require('../../lib/errorHandler');
 var utils = require('./utils');
@@ -79,9 +80,14 @@ module.exports = function(/*middleware*/) {
 		groups = Array.isArray(groups) ? groups : [groups];
 
 		async.each(groups, function(group, groupCb) {
-			async.each(privileges, function(privilege, privilegeCb) {
-				Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
-			}, groupCb);
+			if (action === 'join') {
+				Privileges.categories.give(privileges, cid, group, groupCb);
+			} else {
+				Privileges.categories.rescind(privileges, cid, group, groupCb);
+			}
+			//async.each(privileges, function(privilege, privilegeCb) {
+			//	Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
+			//}, groupCb);
 		}, callback);
 	}
 

@@ -62,6 +62,10 @@ an administrative uid. All other uids passed in will result in an error.
             * Creates a new group
             * **Requires**: `name`
             * **Accepts**: `description`, `hidden`, `private`, `ownerUid`
+        * `PUT /:slug`
+            * Updates a group
+            * **Requires**: `name`
+            * **Accepts**: `description`, `hidden`, `private`, `ownerUid`
         * `DELETE /:slug`
             * Deletes a group (**Careful**: There is no confirmation!)
             * **Accepts**: No parameters

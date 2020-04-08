@@ -22,6 +22,13 @@ module.exports = function(middleware) {
 		});
 	});
 
+	app.put('/:slug', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.requireGroupOwner, function(req, res) {
+
+		Groups.update(res.locals.groupName, req.body, function(err, groupObj) {
+			errorHandler.handle(err, res, groupObj);
+		});
+	});
+
 	app.delete('/:slug', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.requireGroupOwner, function(req, res) {
 		Groups.destroy(res.locals.groupName, function(err) {
 			errorHandler.handle(err, res);
