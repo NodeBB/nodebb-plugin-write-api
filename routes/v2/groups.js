@@ -121,6 +121,30 @@ module.exports = function(middleware) {
 		});
 	});
 
+	app.put('/:slug/invite/:uid', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.requireGroupOwner, apiMiddleware.validateGroup, function(req, res) {
+		Groups.isPending(req.params.uid, res.locals.groupName, function(err, isPending) {
+			if (isPending) {
+				Groups.acceptMembership(res.locals.groupName, req.params.uid, function(err) {
+					errorHandler.handle(err, res);
+				});
+			} else {
+				errorHandler.respond(400, res);
+			}
+		});
+	});
+
+	app.delete('/:slug/invite/:uid', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.requireGroupOwner, apiMiddleware.validateGroup, function(req, res) {
+		Groups.isPending(req.params.uid, res.locals.groupName, function(err, isPending) {
+			if (isPending) {
+				Groups.rejectMembership(res.locals.groupName, req.params.uid, function(err) {
+					errorHandler.handle(err, res);
+				});
+			} else {
+				errorHandler.respond(400, res);
+			}
+		});
+	});
+
 	app.post('/:slug/ownership/:uid', apiMiddleware.requireUser, middleware.exposeGroupName, apiMiddleware.validateGroup, apiMiddleware.requireGroupOwner, function(req, res) {
 		Users.exists(req.params.uid, function(err, exists) {
 			if (exists) {

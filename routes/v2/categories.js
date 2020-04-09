@@ -80,14 +80,9 @@ module.exports = function(/*middleware*/) {
 		groups = Array.isArray(groups) ? groups : [groups];
 
 		async.each(groups, function(group, groupCb) {
-			if (action === 'join') {
-				Privileges.categories.give(privileges, cid, group, groupCb);
-			} else {
-				Privileges.categories.rescind(privileges, cid, group, groupCb);
-			}
-			//async.each(privileges, function(privilege, privilegeCb) {
-			//	Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
-			//}, groupCb);
+			async.each(privileges, function(privilege, privilegeCb) {
+				Groups[action]('cid:' + cid + ':privileges:' + privilege, group, privilegeCb);
+			}, groupCb);
 		}, callback);
 	}
 
