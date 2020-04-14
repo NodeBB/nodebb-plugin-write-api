@@ -24,6 +24,18 @@
     "url": "https://github.com/julianlam/nodebb-plugin-write-api/issues"
   },
   "homepage": "https://github.com/julianlam/nodebb-plugin-write-api",
+  "husky": {
+    "hooks": {
+        "pre-commit": "lint-staged",
+        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+      "*.js": [
+          "eslint --fix",
+          "git add"
+      ]
+  },
   "dependencies": {
     "async": "^2",
     "express": "^4.17.1",
@@ -33,5 +45,14 @@
   },
   "nbbpm": {
     "compatibility": "^1.12.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-angular": "^8.3.4",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.1.3"
   }
 }
