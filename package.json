@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-write-api",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "description": "Write-enabled API for NodeBB",
   "main": "index.js",
   "scripts": {
@@ -26,15 +26,15 @@
   "homepage": "https://github.com/julianlam/nodebb-plugin-write-api",
   "husky": {
     "hooks": {
-        "pre-commit": "lint-staged",
-        "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
-      "*.js": [
-          "eslint --fix",
-          "git add"
-      ]
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "async": "^2",
