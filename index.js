@@ -1,15 +1,15 @@
 'use strict';
-/* globals module, require */
 
-var	passport = module.parent.require('passport'),
-	BearerStrategy = require('passport-http-bearer').Strategy,
+var	passport = require.main.require('passport');
+var	winston = require.main.require('winston');
+var BearerStrategy = require('passport-http-bearer').Strategy;
 
-	meta = require.main.require('./src/meta'),
+var meta = require.main.require('./src/meta');
 
-	auth = require('./lib/auth'),
-	sockets = require('./lib/sockets'),
+var auth = require('./lib/auth');
+var sockets = require('./lib/sockets');
 
-	API = {};
+var API = {};
 
 API.init = function (data, callback) {
 	// API Versions
@@ -18,7 +18,7 @@ API.init = function (data, callback) {
 	data.router.use('/api/v2', routes.v2);
 
 	// Set up HTTP bearer authentication via Passport
-	passport.use(new BearerStrategy({}, function(token, done) {
+	passport.use(new BearerStrategy({}, function (token, done) {
 		// Find the user by token.  If there is no user with the given token, set
 		// the user to `false` to indicate failure.  Otherwise, return the
 		// authenticated `user`.  Note that in a production-ready application, one
@@ -33,25 +33,29 @@ API.init = function (data, callback) {
 	callback();
 };
 
-API.addMenuItem = function(custom_header, callback) {
+API.addMenuItem = function (custom_header, callback) {
 	custom_header.plugins.push({
 		route: '/plugins/write-api',
 		icon: 'fa-cogs',
-		name: 'Write API'
+		name: 'Write API',
 	});
 
 	callback(null, custom_header);
 };
 
-API.authenticate = function(data) {
+API.authenticate = function (data) {
 	require('./routes/v2/middleware').requireUser(data.req, data.res, data.next);
 };
 
 API.associateUser = require('./routes/v2/middleware').associateUser;
 
-API.reloadSettings = function(hash) {
+API.reloadSettings = function (hash) {
 	if (!hash || hash === 'settings:writeapi') {
-		meta.settings.get('writeapi', function(err, settings) {
+		meta.settings.get('writeapi', function (err, settings) {
+			if (err) {
+				winston.warn('[plugins/write-api] Unable to reload settings');
+			}
+
 			API.settings = settings;
 		});
 	}
