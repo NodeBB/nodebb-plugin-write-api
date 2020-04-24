@@ -22,19 +22,24 @@ const Middleware = {
 	},
 };
 
-Middleware.requireUser = function (req, res, next) {
+Middleware.requireUser = async function (req, res, next) {
 	var writeApi = require.main.require('nodebb-plugin-write-api');
 	var routeMatch;
 
-	if (plugins.hasListeners('response:plugin.write-api.authenticate')) {
-		plugins.fireHook('response:plugin.write-api.authenticate', {
-			req: req,
-			res: res,
-			next: next,
-			utils: utils,
-			errorHandler: errorHandler,
-		});
-	} else if (req.headers.hasOwnProperty('authorization')) {
+	await plugins.fireHook('response:plugin.write-api.authenticate', {
+		req: req,
+		res: res,
+		next: function () {},	// noop for backwards compatibility purposes
+		utils: utils,
+		errorHandler: errorHandler,
+	});
+
+	// If plugins handle the response, stop default actions
+	if (res.headersSent) {
+		return;
+	}
+
+	if (req.headers.hasOwnProperty('authorization')) {
 		passport.authenticate('bearer', { session: false }, function (err, user) {
 			if (err) { return next(err); }
 			if (!user) { return errorHandler.respond(401, res); }
