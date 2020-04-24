@@ -20,12 +20,15 @@ module.exports = function (app, coreMiddleware) {
 		await plugins.fireHook('response:plugin.write-api.route', {
 			req: req,
 			res: res,
-			next: next,
 			utils: utils,
 			errorHandler: errorHandler,
 			method: req.method,
 			route: req.originalUrl,
 		});
+
+		if (!res.headersSent) {
+			next();
+		}
 	});
 
 	app.use('/users', require('./users')(coreMiddleware));
