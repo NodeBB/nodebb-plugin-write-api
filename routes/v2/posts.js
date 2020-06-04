@@ -2,6 +2,7 @@
 /* globals module, require */
 
 var posts = require.main.require('./src/posts'),
+	flags = require.main.require('./src/flags'),
 	apiMiddleware = require('./middleware'),
 	errorHandler = require('../../lib/errorHandler'),
 	utils = require('./utils');
@@ -86,7 +87,18 @@ module.exports = function(middleware) {
 			posts.unbookmark(req.params.pid, req.user.uid, function (err) {
 				errorHandler.handle(err, res);
 			});
-		});		
+		});
+	
+	app.route('/:pid/flag')
+		.post(apiMiddleware.requireUser, function(req, res) {
+			if (!utils.checkRequired(['type','reason'], req, res)) {
+				return false;
+			}
+
+			flags.create(req.body.type, req.params.pid, req.user.uid, req.body.reason, function (err) {
+				errorHandler.handle(err, res);
+			});
+		});
 
 	return app;
 };

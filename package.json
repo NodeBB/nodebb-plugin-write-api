@@ -1,6 +1,6 @@
 {
   "name": "nodebb-plugin-write-api-robyweb",
-  "version": "5.6.4",
+  "version": "5.6.5",
   "description": "Write-enabled API for NodeBB",
   "main": "index.js",
   "scripts": {
