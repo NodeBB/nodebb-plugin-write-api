@@ -24,7 +24,7 @@ const Middleware = {
 };
 
 Middleware.requireUser = function(req, res, next) {
-	var writeApi = require.main.require('nodebb-plugin-write-api');
+	var writeApi = require.main.require('nodebb-plugin-write-api-robyweb');
 	var routeMatch;
 
 	if (plugins.hasListeners('response:plugin.write-api.authenticate')) {

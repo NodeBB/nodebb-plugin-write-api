@@ -8,6 +8,8 @@ var Topics = require.main.require('./src/topics'),
 	utils = require('./utils'),
 	winston = require.main.require('winston');
 
+const { wrapPromise } = utils;
+
 module.exports = function(middleware) {
 	var app = require('express').Router();
 
@@ -149,6 +151,87 @@ module.exports = function(middleware) {
 				errorHandler.handle(err, res);
 			});
 		});
+
+	app.route('/sugessted')
+		.get(apiMiddleware.requireUser, wrapPromise(async (req) => {
+			const numTopics = 10;
+			const { topicId = null, categoryId = null } = req.query;
+
+			let topicData;
+			if (topicId) {
+				topicData = await Topics.getSuggestedTopics(topicId, req.user.uid, 0, numTopics);
+			} else if (categoryId) {
+				const data = await Topics.getSortedTopics({
+					cid: categoryId,
+					uid: req.user.uid,
+					start: 0,
+					stop: 2 * numTopics,
+					term: 'alltime',
+					sort: 'votes',
+				});
+				topicData = data ? _.shuffle(data.topics).slice(0, numTopics + 1) : [];
+			} else {
+				const data = await Topics.getTopicsFromSet('topics:recent', req.user.uid, 0, numTopics);
+				topicData = data ? data.topics : [];
+			}
+
+			return topicData;
+	}));
+
+	app.route('/popular')
+		.get(apiMiddleware.requireUser, wrapPromise(async (req) => {
+				const numTopics = 10;
+				const data = await Topics.getSortedTopics({
+					uid: req.user.uid,
+					start: 0,
+					stop: numTopics - 1,
+					term: 'alltime',
+					sort: 'posts',
+				});
+
+			return data.topics;
+		}));
+
+	app.route('/top')
+		.get(apiMiddleware.requireUser, wrapPromise(async (req) => {
+				const numTopics = 10;
+				const data = await Topics.getSortedTopics({
+					uid: req.user.uid,
+					start: 0,
+					stop: numTopics - 1,
+					term: 'alltime',
+					sort: 'votes',
+				});
+
+			return data.topics;
+		}));
+
+	app.route('/recent')
+		.get(apiMiddleware.requireUser, wrapPromise(async (req) => {
+			const numTopics = 10;
+			const { categoryIds = []} = req.query;
+
+			let key;
+			if (categoryIds.length) {
+				if (categoryIds.length === 1) {
+					key = 'cid:' + categoryIds[0] + ':tids';
+				} else {
+					key = categoryIds.map(cid => 'cid:' + cid + ':tids');
+				}
+			} else {
+				key = 'topics:recent';
+			}
+			const data = await Topics.getTopicsFromSet(key, req.user.uid, 0, Math.max(0, numTopics));
+			data.topics.forEach(function (topicData) {
+				if (topicData && !topicData.teaser) {
+					topicData.teaser = {
+						user: topicData.user,
+					};
+				}
+			});
+
+			return data.topics;
+		}));
 
 	return app;
 };

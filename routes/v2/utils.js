@@ -69,4 +69,15 @@ Utils.buildReqObject = function (req) {
 	};
 };
 
+
+Utils.wrapPromise = handler => (req, res, next) => {
+	return Promise.resolve(handler(req, res, next))
+    .then(response => {
+      if (typeof response !== 'undefined') {
+        res.json(response);
+      }
+    })
+    .catch(next);
+};
+
 module.exports = Utils;
