@@ -2,6 +2,7 @@
 
 const jwt = require('jsonwebtoken');
 const async = require('async');
+const util = require('util');
 
 const passport = require.main.require('passport');
 const nconf = require.main.require('nconf');
@@ -22,8 +23,21 @@ const Middleware = {
 	},
 };
 
+const passportAuthenticateAsync = function (req, res) {
+	return new Promise((resolve, reject) => {
+		passport.authenticate('bearer', { session: false }, (err, user) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(user);
+			}
+		})(req, res);
+	});
+};
+
 Middleware.requireUser = async function (req, res, next) {
 	var writeApi = require.main.require('nodebb-plugin-write-api');
+	const loginAsync = util.promisify(req.login).bind(req);
 	var routeMatch;
 
 	await plugins.fireHook('response:plugin.write-api.authenticate', {
@@ -40,42 +54,44 @@ Middleware.requireUser = async function (req, res, next) {
 	}
 
 	if (req.headers.hasOwnProperty('authorization')) {
-		passport.authenticate('bearer', { session: false }, function (err, user) {
-			if (err) { return next(err); }
-			if (!user) { return errorHandler.respond(401, res); }
+		const user = await passportAuthenticateAsync(req, res);
+		if (!user) { return errorHandler.respond(401, res); }
 
-			// If the token received was a master token, a _uid must also be present for all calls
-			if (user.hasOwnProperty('uid')) {
-				req.login(user, function (err) {
-					if (err) { return errorHandler.respond(500, res); }
-
-					req.uid = user.uid;
-					req.loggedIn = req.uid > 0;
-					next();
-				});
-			} else if (user.hasOwnProperty('master') && user.master === true) {
-				if (req.body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
-					user.uid = req.body._uid || req.query._uid;
-					delete user.master;
-
-					req.login(user, function (err) {
-						if (err) { return errorHandler.respond(500, res); }
-
-						req.uid = user.uid;
-						req.loggedIn = req.uid > 0;
-						next();
-					});
-				} else {
-					res.status(400).json(errorHandler.generate(
-						400, 'params-missing',
-						'Required parameters were missing from this API call, please see the "params" property',
-						['_uid']
-					));
-				}
-			} else {
+		// If the token received was a master token, a _uid must also be present for all calls
+		if (user.hasOwnProperty('uid')) {
+			try {
+				await loginAsync(user);
+			} catch (e) {
 				return errorHandler.respond(500, res);
 			}
-		})(req, res, next);
+
+			req.uid = user.uid;
+			req.loggedIn = req.uid > 0;
+			next();
+		} else if (user.hasOwnProperty('master') && user.master === true) {
+			if (req.body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
+				user.uid = req.body._uid || req.query._uid;
+				delete user.master;
+
+				try {
+					await loginAsync(user);
+				} catch (e) {
+					return errorHandler.respond(500, res);
+				}
+
+				req.uid = user.uid;
+				req.loggedIn = req.uid > 0;
+				next();
+			} else {
+				res.status(400).json(errorHandler.generate(
+					400, 'params-missing',
+					'Required parameters were missing from this API call, please see the "params" property',
+					['_uid']
+				));
+			}
+		} else {
+			return errorHandler.respond(500, res);
+		}
 	} else if (writeApi.settings['jwt:enabled'] === 'on' && writeApi.settings.hasOwnProperty('jwt:secret')) {
 		var token = (writeApi.settings['jwt:payloadKey'] ? (req.query[writeApi.settings['jwt:payloadKey']] || req.body[writeApi.settings['jwt:payloadKey']]) : null) || req.query.token || req.body.token;
 		jwt.verify(token, writeApi.settings['jwt:secret'], {

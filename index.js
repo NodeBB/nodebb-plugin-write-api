@@ -43,8 +43,8 @@ API.addMenuItem = function (custom_header, callback) {
 	callback(null, custom_header);
 };
 
-API.authenticate = function (data) {
-	require('./routes/v2/middleware').requireUser(data.req, data.res, data.next);
+API.authenticate = async (data) => {
+	await require('./routes/v2/middleware').requireUser(data.req, data.res, data.next);
 };
 
 API.associateUser = require('./routes/v2/middleware').associateUser;
