@@ -113,7 +113,6 @@ Middleware.requireUser = async function (req, res, next) {
 
 					req.uid = decoded._uid;
 					req.loggedIn = req.uid > 0;
-					req.body = decoded;
 					next();
 				});
 			} else {
