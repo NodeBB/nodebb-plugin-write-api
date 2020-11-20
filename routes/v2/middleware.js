@@ -113,7 +113,11 @@ Middleware.requireUser = async function (req, res, next) {
 
 					req.uid = decoded._uid;
 					req.loggedIn = req.uid > 0;
-					req.body = decoded;
+
+					// Use decoded token as payload if no request body passed in
+					if (Object.keys(decoded).length > 1 && (!req.body || !Object.keys(req.body).length)) {
+						req.body = decoded;
+					}
 					next();
 				});
 			} else {
