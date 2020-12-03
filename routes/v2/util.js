@@ -17,9 +17,9 @@ module.exports = function (/* middleware */) {
 			return next(new Error('[[error:uploads-are-disabled]]'));
 		}
 
-		uploadController.upload(req, res, function (uploadedFile, callback) {
-			uploadController.uploadFile(req.user.uid, uploadedFile, callback);
-		}, next);
+		await uploadController.upload(req, res, async function (uploadedFile) {
+			return await uploadController.uploadFile(req.user.uid, uploadedFile);
+        	});
 	});
 
 	app.route('/maintenance')
