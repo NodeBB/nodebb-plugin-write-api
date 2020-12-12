@@ -14,7 +14,7 @@ Alternatively:
 
 ```
 $ cd /path/to/nodebb/node_modules
-$ git clone git@github.com:julianlam/nodebb-plugin-write-api.git
+$ git clone git@github.com:NodeBB/nodebb-plugin-write-api.git
 $ cd nodebb-plugin-write-api
 $ npm i
 ```
