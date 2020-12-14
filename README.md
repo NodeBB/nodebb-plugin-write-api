@@ -1,3 +1,11 @@
+# Deprecation
+
+As of NodeBB v1.15.0, this plugin is deprecated and has entered maintenance mode. You can of course still use this plugin with versions of v1.15.x and beyond, and I will continue to ensure it is compatible; however new features will not be added.
+
+[Please see this blog post for more information](https://blog.nodebb.org/api-continues-to-evolve/)
+
+New users are recommended to use [the built-in Write API](https://docs.nodebb.org/api/write) that comes with NodeBB v1.15.0 and up.
+
 # Write API
 
 This plugin exposes a *write enabled API interface* for NodeBB. It is useful if you would like to supplment the built-in *read-only* API, in order to push items/actions/events to NodeBB.
