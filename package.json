@@ -44,7 +44,7 @@
     "passport-http-bearer": "^1.0.1"
   },
   "nbbpm": {
-    "compatibility": "^1.13.3"
+    "compatibility": "^1.17.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^9.1.2",

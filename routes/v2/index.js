@@ -58,7 +58,7 @@ module.exports = function (app, coreMiddleware) {
 
 	// This router is reserved exclusively for plugins to add their own routes into the write api plugin. Confused yet? :trollface:
 	var customRouter = require('express').Router();
-	plugins.fireHook('filter:plugin.write-api.routes', {
+	plugins.hooks.fire('filter:plugin.write-api.routes', {
 		router: customRouter,
 		apiMiddleware: apiMiddleware,
 		middleware: coreMiddleware,
