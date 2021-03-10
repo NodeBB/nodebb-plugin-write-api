@@ -164,7 +164,7 @@ Middleware.associateUser = async function (req, res, next) {
 
 		// If plugins handle the response, stop default actions
 		if (res.headersSent) {
-			return;
+			return next();
 		}
 
 		passport.authenticate('bearer', { session: false }, function (err, user) {
