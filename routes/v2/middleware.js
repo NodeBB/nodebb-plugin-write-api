@@ -152,8 +152,21 @@ Middleware.requireUser = async function (req, res, next) {
 	}
 };
 
-Middleware.associateUser = function (req, res, next) {
+Middleware.associateUser = async function (req, res, next) {
 	if (req.headers.hasOwnProperty('authorization')) {
+		await plugins.fireHook('response:plugin.write-api.authenticate', {
+			req: req,
+			res: res,
+			next: function () {},	// noop for backwards compatibility purposes
+			utils: utils,
+			errorHandler: errorHandler,
+		});
+
+		// If plugins handle the response, stop default actions
+		if (res.headersSent) {
+			return next();
+		}
+
 		passport.authenticate('bearer', { session: false }, function (err, user) {
 			if (err || !user) { return next(err); }
 
