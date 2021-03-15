@@ -17,7 +17,7 @@ module.exports = function (app, coreMiddleware) {
 
 	app.use(async (req, res, next) => {
 		// Allow plugins to hook into arbitrary routes
-		await plugins.fireHook('response:plugin.write-api.route', {
+		await plugins.hooks.fire('response:plugin.write-api.route', {
 			req: req,
 			res: res,
 			utils: utils,

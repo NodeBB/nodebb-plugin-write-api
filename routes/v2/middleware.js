@@ -41,7 +41,7 @@ Middleware.requireUser = async function (req, res, next) {
 	const loginAsync = util.promisify(req.login).bind(req);
 	var routeMatch;
 
-	await plugins.fireHook('response:plugin.write-api.authenticate', {
+	await plugins.hooks.fire('response:plugin.write-api.authenticate', {
 		req: req,
 		res: res,
 		next: function () {},	// noop for backwards compatibility purposes
@@ -154,7 +154,7 @@ Middleware.requireUser = async function (req, res, next) {
 
 Middleware.associateUser = async function (req, res, next) {
 	if (req.headers.hasOwnProperty('authorization')) {
-		await plugins.fireHook('response:plugin.write-api.authenticate', {
+		await plugins.hooks.fire('response:plugin.write-api.authenticate', {
 			req: req,
 			res: res,
 			next: function () {},	// noop for backwards compatibility purposes
