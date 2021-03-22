@@ -24,8 +24,8 @@ module.exports = function () {
 
 			if (req.body.handle) { payload.handle = req.body.handle; }
 			if (req.body.title) { payload.title = req.body.title; }
-			if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
-			if (req.body.tags) { payload.options.tags = req.body.tags; }
+			if (req.body.topic_thumb) { payload.topic_thumb = req.body.topic_thumb; }
+			if (req.body.tags) { payload.tags = req.body.tags; }
 
 			posts.edit(payload, function (err) {
 				errorHandler.handle(err, res);
