@@ -1,17 +1,16 @@
 'use strict';
-/* globals module, require */
 
-var posts = require.main.require('./src/posts'),
-	apiMiddleware = require('./middleware'),
-	errorHandler = require('../../lib/errorHandler'),
-	utils = require('./utils');
+var posts = require.main.require('./src/posts');
+var apiMiddleware = require('./middleware');
+var errorHandler = require('../../lib/errorHandler');
+var utils = require('./utils');
 
 
-module.exports = function(middleware) {
+module.exports = function () {
 	var app = require('express').Router();
 
 	app.route('/:pid')
-		.put(apiMiddleware.requireUser, function(req, res) {
+		.put(apiMiddleware.requireUser, function (req, res) {
 			if (!utils.checkRequired(['content'], req, res)) {
 				return false;
 			}
@@ -20,7 +19,7 @@ module.exports = function(middleware) {
 				uid: req.user.uid,
 				pid: req.params.pid,
 				content: req.body.content,
-				options: {}
+				options: {},
 			};
 
 			if (req.body.handle) { payload.handle = req.body.handle; }
@@ -28,16 +27,16 @@ module.exports = function(middleware) {
 			if (req.body.topic_thumb) { payload.options.topic_thumb = req.body.topic_thumb; }
 			if (req.body.tags) { payload.options.tags = req.body.tags; }
 
-			posts.edit(payload, function(err) {
+			posts.edit(payload, function (err) {
 				errorHandler.handle(err, res);
-			})
+			});
 		})
-		.delete(apiMiddleware.requireUser, apiMiddleware.validatePid, function(req, res) {
-			posts.purge(req.params.pid, req.user.uid, function(err) {
+		.delete(apiMiddleware.requireUser, apiMiddleware.validatePid, function (req, res) {
+			posts.purge(req.params.pid, req.user.uid, function (err) {
 				errorHandler.handle(err, res);
 			});
 		});
-	
+
 	app.route('/:pid/state')
 		.put(apiMiddleware.requireUser, apiMiddleware.validatePid, function (req, res) {
 			posts.restore(req.params.pid, req.user.uid, function (err) {
@@ -49,35 +48,35 @@ module.exports = function(middleware) {
 				errorHandler.handle(err, res);
 			});
 		});
-		
+
 	app.route('/:pid/vote')
-		.post(apiMiddleware.requireUser, function(req, res) {
+		.post(apiMiddleware.requireUser, function (req, res) {
 			if (!utils.checkRequired(['delta'], req, res)) {
 				return false;
 			}
 
 			if (req.body.delta > 0) {
-				posts.upvote(req.params.pid, req.user.uid, function(err, data) {
+				posts.upvote(req.params.pid, req.user.uid, function (err, data) {
 					errorHandler.handle(err, res, data);
-				})
+				});
 			} else if (req.body.delta < 0) {
-				posts.downvote(req.params.pid, req.user.uid, function(err, data) {
+				posts.downvote(req.params.pid, req.user.uid, function (err, data) {
 					errorHandler.handle(err, res, data);
-				})
+				});
 			} else {
-				posts.unvote(req.params.pid, req.user.uid, function(err, data) {
+				posts.unvote(req.params.pid, req.user.uid, function (err, data) {
 					errorHandler.handle(err, res, data);
-				})	
+				});
 			}
 		})
-		.delete(apiMiddleware.requireUser, function(req, res) {
-			posts.unvote(req.params.pid, req.user.uid, function(err, data) {
+		.delete(apiMiddleware.requireUser, function (req, res) {
+			posts.unvote(req.params.pid, req.user.uid, function (err, data) {
 				errorHandler.handle(err, res, data);
-			})
+			});
 		});
 
 	app.route('/:pid/bookmark')
-		.post(apiMiddleware.requireUser, function(req, res) {
+		.post(apiMiddleware.requireUser, function (req, res) {
 			posts.bookmark(req.params.pid, req.user.uid, function (err) {
 				errorHandler.handle(err, res);
 			});
@@ -86,7 +85,7 @@ module.exports = function(middleware) {
 			posts.unbookmark(req.params.pid, req.user.uid, function (err) {
 				errorHandler.handle(err, res);
 			});
-		});		
+		});
 
 	return app;
 };
