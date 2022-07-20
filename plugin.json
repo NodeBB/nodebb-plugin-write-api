@@ -15,7 +15,7 @@
 	"less": [
 		"./less/style.less"
 	],
-	"acpScripts": [
-		"public/js/admin.js"
-	]
+	"modules": {
+		"../admin/plugins/write-api.js": "public/js/admin.js"
+	}
 }
