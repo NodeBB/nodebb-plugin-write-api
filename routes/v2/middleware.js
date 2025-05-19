@@ -37,7 +37,9 @@ const passportAuthenticateAsync = function (req, res) {
 
 Middleware.requireUser = async function (req, res, next) {
 	var writeApi = require.main.require('nodebb-plugin-write-api');
-	var token = (writeApi.settings['jwt:payloadKey'] ? (req.query[writeApi.settings['jwt:payloadKey']] || req.body[writeApi.settings['jwt:payloadKey']]) : null) || req.query.token || req.body.token;
+	const query = req.query || {};
+	const body = req.body || {};
+	var token = (writeApi.settings['jwt:payloadKey'] ? (query[writeApi.settings['jwt:payloadKey']] || body[writeApi.settings['jwt:payloadKey']]) : null) || query.token || body.token;
 	const loginAsync = util.promisify(req.login).bind(req);
 	var routeMatch;
 
