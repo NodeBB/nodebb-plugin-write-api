@@ -7,6 +7,7 @@ const util = require('util');
 const passport = require.main.require('passport');
 const nconf = require.main.require('nconf');
 
+const meta = require.main.require('./src/meta');
 const user = require.main.require('./src/user');
 const groups = require.main.require('./src/groups');
 const posts = require.main.require('./src/posts');
