@@ -36,10 +36,14 @@ const passportAuthenticateAsync = function (req, res) {
 };
 
 Middleware.requireUser = async function (req, res, next) {
-	var writeApi = require.main.require('nodebb-plugin-write-api');
+	const {
+		'jwt:payloadKey': payloadKey,
+		'jwt:enabled': enabled,
+		'jwt:secret': secret,
+	} = await meta.settings.get('writeapi');
 	const query = req.query || {};
 	const body = req.body || {};
-	var token = (writeApi.settings['jwt:payloadKey'] ? (query[writeApi.settings['jwt:payloadKey']] || body[writeApi.settings['jwt:payloadKey']]) : null) || query.token || body.token;
+	const token = (payloadKey ? (query[payloadKey] || body[payloadKey]) : null) || query.token || body.token;
 	const loginAsync = util.promisify(req.login).bind(req);
 	var routeMatch;
 
@@ -95,8 +99,8 @@ Middleware.requireUser = async function (req, res, next) {
 		} else {
 			return errorHandler.respond(500, res);
 		}
-	} else if (token && writeApi.settings['jwt:enabled'] === 'on' && writeApi.settings.hasOwnProperty('jwt:secret')) {
-		jwt.verify(token, writeApi.settings['jwt:secret'], {
+	} else if (token && enabled === 'on' && !!secret) {
+		jwt.verify(token, secret, {
 			ignoreExpiration: true,
 		}, function (err, decoded) {
 			if (!err && decoded) {
