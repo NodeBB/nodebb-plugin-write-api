@@ -187,8 +187,9 @@ Middleware.associateUser = async function (req, res, next) {
 					next();
 				});
 			} else if (user.hasOwnProperty('master') && user.master === true) {
-				if (req.body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
-					user.uid = req.body._uid || req.query._uid;
+				const body = req.body || {};
+				if (body.hasOwnProperty('_uid') || req.query.hasOwnProperty('_uid')) {
+					user.uid = body._uid || req.query._uid;
 					delete user.master;
 
 					req.login(user, function (err) {
