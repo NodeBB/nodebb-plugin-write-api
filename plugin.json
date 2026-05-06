@@ -9,7 +9,8 @@
 		{ "hook": "static:app.load", "method": "init" },
 		{ "hook": "filter:admin.header.build", "method": "addMenuItem" },
 		{ "hook": "response:middleware.authenticate", "method": "authenticate"},
-		{ "hook": "filter:router.page", "method": "associateUser" },
+		{ "hook": "filter:router.page", "method": "filterRouterPage" },
+		{ "hook": "response:router.page", "method": "responseRouterPage" },
 		{ "hook": "action:settings.set", "method": "reloadSettings" }
 	],
 	"less": [

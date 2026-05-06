@@ -47,7 +47,19 @@ API.authenticate = async (data) => {
 	await require('./routes/v2/middleware').requireUser(data.req, data.res, data.next);
 };
 
-API.associateUser = require('./routes/v2/middleware').associateUser;
+// THIS IS THE OLD HOOK FORMAT, removed in nbb 3.x+
+API.filterRouterPage = async (req, res, next) => {
+	await require('./routes/v2/middleware').associateUser(req, res, next);
+};
+
+API.responseRouterPage = ({ req, res }) => {
+	return new Promise((resolve, reject) => {
+		require('./routes/v2/middleware').associateUser(req, res, function (err) {
+			if (err) reject(err);
+			else resolve();
+		});
+	});
+};
 
 API.reloadSettings = function (hash) {
 	if (!hash || hash === 'settings:writeapi') {
