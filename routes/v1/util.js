@@ -3,7 +3,7 @@
 
 var apiMiddleware = require('./middleware');
 
-var multipart = require.main.require('connect-multiparty');
+var multipart = require('connect-multiparty');
 var uploadController = require.main.require('./src/controllers/uploads');
 var meta = require.main.require('./src/meta');
 
