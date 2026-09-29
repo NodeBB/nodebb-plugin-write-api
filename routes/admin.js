@@ -7,7 +7,7 @@
 		path = require('path'),
 		db = require.main.require('./src/database'),
 		User = require.main.require('./src/user');
-	
+
 	var md = require('markdown-it')();
 
 	var buildAdminPage = function(req, res) {
@@ -73,7 +73,16 @@
 		};
 
 	module.exports = function(app, middleware) {
-		app.get('/admin/plugins/write-api', middleware.admin.buildHeader, buildAdminPage);
-		app.get('/api/admin/plugins/write-api', buildAdminPage);
+		function requireAdmin(req, res, next) {
+			User.isAdministrator(req.uid, function(err, isAdmin) {
+				if (err) return next(err);
+				if (!isAdmin) {
+					return next(new Error('[[error:no-privileges]]'));
+				}
+				next();
+			});
+		}
+		app.get('/admin/plugins/write-api', middleware.admin.buildHeader, requireAdmin, buildAdminPage);
+		app.get('/api/admin/plugins/write-api', requireAdmin, buildAdminPage);
 	};
 })();
